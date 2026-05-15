@@ -1,11 +1,13 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
-import { siteConfig } from "@/data/siteConfig";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Disclaimer | ${siteConfig.name}`,
+  title: `Disclaimer`,
   description:
     "Disclaimer for the UK Home Battery Savings Calculator and its estimated savings results.",
+  alternates: {
+    canonical: "/disclaimer",
+  },
 };
 
 export default function DisclaimerPage() {

@@ -1,11 +1,13 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
-import { siteConfig } from "@/data/siteConfig";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Terms | ${siteConfig.name}`,
+  title: `Terms`,
   description:
     "Basic terms of use for the UK Home Battery Savings Calculator.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default function TermsPage() {

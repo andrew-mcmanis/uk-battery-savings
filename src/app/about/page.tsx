@@ -1,11 +1,13 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
-import { siteConfig } from "@/data/siteConfig";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `About | ${siteConfig.name}`,
+  title: `About`,
   description:
     "Learn what the UK Home Battery Savings Calculator does, who it is for, and how it estimates potential battery savings.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

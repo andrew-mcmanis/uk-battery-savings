@@ -3,6 +3,6 @@ export const siteConfig = {
   shortName: "Battery Savings",
   description:
     "A privacy-first UK home battery savings calculator for estimating annual savings, monthly savings and payback period.",
-  url: "https://example.com",
+  url: "https://uk-battery-savings.vercel.app",
   contactEmail: "hello@example.com",
 };

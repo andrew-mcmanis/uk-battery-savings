@@ -11,7 +11,7 @@ import { faqSchema } from "@/data/landingPageContent";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "UK Home Battery Savings Calculator | Estimate Payback & Savings",
+  title: "UK Home Battery Savings Calculator",
   description:
     "Estimate whether a home battery and cheap off-peak electricity could reduce your UK electricity bill. Calculate annual savings, monthly savings and payback period.",
   keywords: [
@@ -21,12 +21,16 @@ export const metadata: Metadata = {
     "solar battery savings calculator UK",
     "is a home battery worth it UK",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "UK Home Battery Savings Calculator",
     description:
       "Estimate home battery savings, payback period and break-even cost using UK electricity tariff assumptions.",
     type: "website",
     locale: "en_GB",
+    url: "/",
   },
   robots: {
     index: true,

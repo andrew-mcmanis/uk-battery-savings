@@ -1,11 +1,13 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
-import { siteConfig } from "@/data/siteConfig";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Privacy | ${siteConfig.name}`,
+  title: `Privacy`,
   description:
     "Privacy information for the UK Home Battery Savings Calculator.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {
