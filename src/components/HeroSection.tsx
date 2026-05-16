@@ -57,24 +57,25 @@ export default function HeroSection() {
           <div className="mt-5 space-y-4">
             <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
               <p className="text-sm text-slate-500">Estimated annual saving</p>
-              <p className="mt-2 text-4xl font-bold">£607</p>
+              <p className="mt-2 text-4xl font-bold">£485</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
                 <p className="text-sm text-slate-500">Monthly saving</p>
-                <p className="mt-2 text-2xl font-bold">£51</p>
+                <p className="mt-2 text-2xl font-bold">£40</p>
               </div>
 
               <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
                 <p className="text-sm text-slate-500">Payback</p>
-                <p className="mt-2 text-2xl font-bold">8.2 years</p>
+                <p className="mt-2 text-2xl font-bold">10.3 years</p>
               </div>
             </div>
 
             <p className="text-sm leading-6 text-slate-600">
-              Example only, based on a 10 kWh battery, 28p peak rate, 7p
-              off-peak rate, 90% efficiency and 300 cycles per year.
+              Example only, based on a 10 kWh battery, 8 kWh of useful peak-period
+              usage, 28p peak rate, 7p off-peak rate, 90% efficiency and 300 cycles
+              per year.
             </p>
           </div>
         </div>

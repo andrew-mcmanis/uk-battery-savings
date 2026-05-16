@@ -75,6 +75,11 @@ export const faqs = [
       "A cycle means charging and discharging the battery. If you expect to use the battery most days, a value around 300 cycles per year is a reasonable starting assumption.",
   },
   {
+  question: "Why does peak-period usage covered matter?",
+  answer:
+    "A battery only saves money when its stored energy replaces electricity you would otherwise buy at the higher peak rate. If your battery is larger than your useful peak-period usage, the extra capacity may not improve savings.",
+  },
+  {
     question: "Is the payback period guaranteed?",
     answer:
       "No. The payback period is an estimate only. Real savings depend on your actual household usage, tariff, installation cost, battery settings, battery degradation and future electricity prices.",

@@ -45,6 +45,10 @@ export default function IsAHomeBatteryWorthItPage() {
               can actually deliver.
             </li>
             <li>
+              <strong>Useful peak-period usage:</strong> how much expensive
+              electricity the battery can realistically replace each cycle.
+            </li>
+            <li>
               <strong>Peak electricity rate:</strong> the expensive rate the
               battery helps you avoid.
             </li>

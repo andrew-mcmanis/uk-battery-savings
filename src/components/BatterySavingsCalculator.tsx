@@ -100,6 +100,7 @@ function ResultCard({ title, value, description }: ResultCardProps) {
 export default function BatterySavingsCalculator() {
   const [inputs, setInputs] = useState<BatteryCalculatorInputs>({
     batteryCapacityKwh: 10,
+    peakUsageCoveredKwh: 8,
     installedCost: 5000,
     peakRatePence: 28,
     offPeakRatePence: 7,
@@ -165,6 +166,16 @@ export default function BatterySavingsCalculator() {
               suffix="kWh"
               helpText="The amount of energy the battery can usefully deliver."
               onChange={(value) => updateInput("batteryCapacityKwh", value)}
+            />
+
+            <NumberInput
+              label="Peak-period usage covered"
+              value={inputs.peakUsageCoveredKwh}
+              min={0}
+              step={0.5}
+              suffix="kWh"
+              helpText="How much expensive peak-rate electricity the battery can realistically replace each cycle."
+              onChange={(value) => updateInput("peakUsageCoveredKwh", value)}
             />
 
             <NumberInput
@@ -271,7 +282,19 @@ export default function BatterySavingsCalculator() {
             <ResultCard
               title="Saving per cycle"
               value={formatCurrencyPrecise(results.savingPerCycle)}
-              description="Estimated saving each time the battery is charged and discharged."
+              description="Estimated saving each time the useful battery energy is charged and discharged."
+            />
+
+            <ResultCard
+              title="Battery energy used"
+              value={`${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh`}
+              description="Battery energy assumed to be useful during expensive peak-rate hours."
+            />
+
+            <ResultCard
+              title="Unused capacity"
+              value={`${results.unusedBatteryCapacityPerCycle.toFixed(1)} kWh`}
+              description="Capacity not counted because your peak-period usage does not need it."
             />
 
             <ResultCard
@@ -284,10 +307,11 @@ export default function BatterySavingsCalculator() {
           <div className="rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-950 ring-1 ring-amber-200">
             <p className="font-semibold">Important assumption</p>
             <p className="mt-2">
-              This is a simplified estimate. It does not include installation
-              differences, battery degradation, export payments, solar
-              generation, standing charges, VAT, finance costs or tariff exit
-              fees.
+              This is a simplified estimate. It assumes the battery only saves
+              money when it replaces electricity you would otherwise have bought
+              at the peak rate. It does not include installation differences,
+              battery degradation, export payments, solar generation, standing
+              charges, VAT, finance costs or tariff exit fees.
             </p>
           </div>
 
@@ -295,6 +319,20 @@ export default function BatterySavingsCalculator() {
             <p className="font-semibold text-slate-950">Calculation detail</p>
 
             <div className="mt-3 space-y-2">
+              <p>
+                Useful battery energy per cycle:{" "}
+                <span className="font-semibold">
+                  {results.usableBatteryEnergyPerCycle.toFixed(1)} kWh
+                </span>
+              </p>
+
+              <p>
+                Off-peak energy needed per cycle:{" "}
+                <span className="font-semibold">
+                  {results.offPeakEnergyNeededPerCycle.toFixed(1)} kWh
+                </span>
+              </p>
+
               <p>
                 Peak cost avoided per cycle:{" "}
                 <span className="font-semibold">
