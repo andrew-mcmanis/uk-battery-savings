@@ -5,6 +5,7 @@ import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
 } from "@/lib/batteryCalculator";
+import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { useMemo, useState } from "react";
 
 function formatCurrency(value: number) {
@@ -98,6 +99,35 @@ function ResultCard({ title, value, description }: ResultCardProps) {
   );
 }
 
+function getVerdictClasses(tone: string) {
+  switch (tone) {
+    case "strong":
+      return {
+        container: "bg-emerald-50 ring-emerald-200",
+        badge: "bg-emerald-700 text-white",
+        text: "text-emerald-950",
+      };
+    case "moderate":
+      return {
+        container: "bg-blue-50 ring-blue-200",
+        badge: "bg-blue-700 text-white",
+        text: "text-blue-950",
+      };
+    case "negative":
+      return {
+        container: "bg-red-50 ring-red-200",
+        badge: "bg-red-700 text-white",
+        text: "text-red-950",
+      };
+    default:
+      return {
+        container: "bg-amber-50 ring-amber-200",
+        badge: "bg-amber-700 text-white",
+        text: "text-amber-950",
+      };
+  }
+}
+
 export default function BatterySavingsCalculator() {
   const [inputs, setInputs] = useState<BatteryCalculatorInputs>({
     batteryCapacityKwh: 10,
@@ -115,6 +145,12 @@ export default function BatterySavingsCalculator() {
   const results = useMemo(() => {
     return calculateBatterySavings(inputs);
   }, [inputs]);
+
+  const verdict = useMemo(() => {
+    return getBatteryVerdict({ inputs, results });
+  }, [inputs, results]);
+
+  const verdictClasses = getVerdictClasses(verdict.tone);
 
   function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
     setInputs({ ...presetInputs });
@@ -319,6 +355,35 @@ export default function BatterySavingsCalculator() {
               off-peak energy needed to charge the battery, including battery
               efficiency loss.
             </p>
+          </div>
+
+          <div
+            className={`rounded-3xl p-6 shadow-sm ring-1 ${verdictClasses.container}`}
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-semibold uppercase tracking-wide text-slate-600">
+              Result verdict
+              </p>
+
+              <span
+                className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${verdictClasses.badge}`}
+              >
+                {verdict.label}
+              </span>
+            </div>
+
+            <p className={`mt-4 text-base leading-7 font-medium ${verdictClasses.text}`}>
+              {verdict.summary}
+            </p>
+
+            <ul className="mt-4 space-y-2">
+              {verdict.points.map((point) => (
+                <li key={point} className="flex gap-3 text-sm leading-6 text-slate-700">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-slate-500" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
