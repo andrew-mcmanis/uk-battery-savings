@@ -2,6 +2,7 @@ import BatterySavingsCalculator from "@/components/BatterySavingsCalculator";
 import DisclaimerSection from "@/components/DisclaimerSection";
 import FAQSection from "@/components/FAQSection";
 import FitSection from "@/components/FitSection";
+import GuidesSection from "@/components/GuidesSection";
 import HeroSection from "@/components/HeroSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import SiteFooter from "@/components/SiteFooter";
@@ -54,6 +55,7 @@ export default function Home() {
       <BatterySavingsCalculator />
       <HowItWorksSection />
       <FitSection />
+      <GuidesSection />
       <FAQSection />
       <DisclaimerSection />
       <SiteFooter />

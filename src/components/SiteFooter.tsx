@@ -7,6 +7,14 @@ const footerLinks = [
     href: "/about",
   },
   {
+    label: "Is a battery worth it?",
+    href: "/is-a-home-battery-worth-it-uk",
+  },
+  {
+    label: "Battery without solar",
+    href: "/home-battery-without-solar-uk",
+  },
+  {
     label: "Privacy",
     href: "/privacy",
   },

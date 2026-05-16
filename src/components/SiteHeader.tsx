@@ -11,12 +11,12 @@ const navLinks = [
     href: "/#how-it-works",
   },
   {
-    label: "About",
-    href: "/about",
+    label: "Guides",
+    href: "/#guides",
   },
   {
-    label: "Privacy",
-    href: "/privacy",
+    label: "About",
+    href: "/about",
   },
 ];
 

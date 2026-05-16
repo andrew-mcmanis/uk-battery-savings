@@ -1,7 +1,16 @@
 import { siteConfig } from "@/data/siteConfig";
 import type { MetadataRoute } from "next";
 
-const routes = ["", "/about", "/privacy", "/disclaimer", "/terms"];
+const routes = [
+  "",
+  "/about",
+  "/privacy",
+  "/disclaimer",
+  "/terms",
+  "/is-a-home-battery-worth-it-uk",
+  "/home-battery-without-solar-uk",
+  "/home-battery-payback-period-uk",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date();
