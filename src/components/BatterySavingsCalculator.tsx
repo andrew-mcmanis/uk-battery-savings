@@ -1,5 +1,6 @@
 "use client";
 
+import { batteryPresets } from "@/data/batteryPresets";
 import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
@@ -109,9 +110,16 @@ export default function BatterySavingsCalculator() {
     warrantyYears: 10,
   });
 
+  const [selectedPresetId, setSelectedPresetId] = useState<string>("typical");
+
   const results = useMemo(() => {
     return calculateBatterySavings(inputs);
   }, [inputs]);
+
+  function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
+    setInputs({ ...presetInputs });
+    setSelectedPresetId(presetId);
+  }
 
   function updateInput<Key extends keyof BatteryCalculatorInputs>(
     key: Key,
@@ -121,6 +129,8 @@ export default function BatterySavingsCalculator() {
       ...currentInputs,
       [key]: value,
     }));
+
+    setSelectedPresetId("custom");
   }
 
   const hasPositiveSaving = results.annualSaving > 0;
@@ -156,6 +166,51 @@ export default function BatterySavingsCalculator() {
             The default values are only a starting example. Change them to match
             the tariff and battery setup you are considering.
           </p>
+
+          <div className="mt-6 rounded-2xl bg-emerald-50 p-5 ring-1 ring-emerald-100">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h4 className="font-semibold text-slate-950">Quick scenarios</h4>
+                <p className="mt-1 text-sm text-slate-600">
+                  Start with a preset, then adjust the numbers to match your own quote or
+                  tariff.
+                </p>
+              </div>
+
+              {selectedPresetId === "custom" ? (
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
+                  Custom values
+                </span>
+              ) : null}
+            </div>
+
+            <div className="mt-4 grid gap-3">
+              {batteryPresets.map((preset) => {
+                const isSelected = selectedPresetId === preset.id;
+
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => applyPreset(preset.id, preset.inputs)}
+                    className={`rounded-xl border p-4 text-left transition ${
+                      isSelected
+                        ? "border-emerald-600 bg-white shadow-sm"
+                        : "border-emerald-100 bg-white/70 hover:border-emerald-300 hover:bg-white"
+                    }`}
+                  >
+                    <span className="block text-sm font-semibold text-slate-950">
+                      {preset.label}
+                    </span>
+
+                    <span className="mt-1 block text-sm leading-6 text-slate-600">
+                      {preset.description}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="mt-6 grid gap-5">
             <NumberInput
