@@ -1,54 +1,55 @@
 import { siteConfig } from "@/data/siteConfig";
+import { routePaths } from "@/data/siteRoutes";
 import Link from "next/link";
 
 const footerLinks = [
   {
     label: "About",
-    href: "/about",
+    href: routePaths.about,
   },
   {
     label: "Methodology",
-    href: "/methodology",
+    href: routePaths.methodology,
   },
   {
     label: "Guides",
-    href: "/guides",
+    href: routePaths.guides,
   },
   {
     label: "Feedback",
-    href: "/feedback",
+    href: routePaths.feedback,
   },
   {
     label: "Is a battery worth it?",
-    href: "/is-a-home-battery-worth-it-uk",
+    href: routePaths.isBatteryWorthIt,
   },
   {
     label: "Battery without solar",
-    href: "/home-battery-without-solar-uk",
+    href: routePaths.batteryWithoutSolar,
   },
   {
     label: "Payback guide",
-    href: "/home-battery-payback-period-uk",
+    href: routePaths.batteryPaybackPeriod,
   },
   {
     label: "Savings examples",
-    href: "/home-battery-savings-examples-uk",
+    href: routePaths.batterySavingsExamples,
   },
   {
     label: "Quote checklist",
-    href: "/home-battery-quote-checklist-uk",
+    href: routePaths.batteryQuoteChecklist,
   },
   {
     label: "Privacy",
-    href: "/privacy",
+    href: routePaths.privacy,
   },
   {
     label: "Disclaimer",
-    href: "/disclaimer",
+    href: routePaths.disclaimer,
   },
   {
     label: "Terms",
-    href: "/terms",
+    href: routePaths.terms,
   },
 ];
 

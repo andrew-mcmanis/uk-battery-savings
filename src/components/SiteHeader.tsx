@@ -1,30 +1,31 @@
 import Link from "next/link";
 import { siteConfig } from "@/data/siteConfig";
+import { routePaths } from "@/data/siteRoutes";
 
 const navLinks = [
   {
     label: "Calculator",
-    href: "/#calculator",
+    href: `${routePaths.home}#calculator`,
   },
   {
     label: "Guides",
-    href: "/guides",
+    href: routePaths.guides,
   },
   {
     label: "How it works",
-    href: "/#how-it-works",
+    href: `${routePaths.home}#how-it-works`,
   },
   {
     label: "About",
-    href: "/about",
+    href: routePaths.about,
   },
   {
     label: "Feedback",
-    href: "/feedback",
+    href: routePaths.feedback,
   },
   {
     label: "Privacy",
-    href: "/privacy",
+    href: routePaths.privacy,
   },
 ];
 
@@ -61,7 +62,7 @@ export default function SiteHeader() {
           </nav>
 
           <Link
-            href="/#calculator"
+            href={`${routePaths.home}#calculator`}
             className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
           >
             Start

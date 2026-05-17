@@ -1,32 +1,34 @@
+import { routePaths } from "@/data/siteRoutes";
+
 export const guides = [
   {
     title: "Is a home battery worth it in the UK?",
     description:
       "Understand when a battery may make sense, when it may not, and which numbers matter most.",
-    href: "/is-a-home-battery-worth-it-uk",
+    href: routePaths.isBatteryWorthIt,
   },
   {
     title: "Is a home battery worth it without solar?",
     description:
       "Learn how grid charging on cheap off-peak electricity can work even without solar panels.",
-    href: "/home-battery-without-solar-uk",
+    href: routePaths.batteryWithoutSolar,
   },
   {
     title: "How to estimate battery payback period",
     description:
       "See how installed cost and annual saving combine to produce a simple payback estimate.",
-    href: "/home-battery-payback-period-uk",
+    href: routePaths.batteryPaybackPeriod,
   },
   {
     title: "Home battery savings examples",
     description:
       "Compare small, typical and high-usage examples to see how assumptions change estimated savings.",
-    href: "/home-battery-savings-examples-uk",
+    href: routePaths.batterySavingsExamples,
   },
   {
     title: "Home battery quote checklist",
     description:
       "Know what to ask before accepting a battery quote, including warranty, usable capacity and savings assumptions.",
-    href: "/home-battery-quote-checklist-uk",
+    href: routePaths.batteryQuoteChecklist,
   },
 ];
