@@ -269,6 +269,336 @@ export default function BatterySavingsCalculator() {
     }
   }
 
+  function printEstimate() {
+    const generatedDate = new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(new Date());
+
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      window.print();
+      return;
+    }
+
+    const estimateHtml = `
+  <!doctype html>
+  <html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <title>UK Home Battery Savings Estimate</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #0f172a;
+        background: #ffffff;
+        font-size: 10.5pt;
+        line-height: 1.4;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        align-items: flex-start;
+        border-bottom: 2px solid #0f172a;
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+      }
+
+      .brand {
+        font-size: 10pt;
+        font-weight: 700;
+        color: #047857;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      h1 {
+        margin: 5px 0 0;
+        font-size: 22pt;
+        line-height: 1.1;
+      }
+
+      .meta {
+        text-align: right;
+        font-size: 9pt;
+        color: #475569;
+        min-width: 180px;
+      }
+
+      .notice {
+        margin: 0 0 14px;
+        padding: 10px 12px;
+        border: 1px solid #f59e0b;
+        background: #fffbeb;
+        border-radius: 10px;
+        color: #78350f;
+        font-size: 9.5pt;
+      }
+
+      .section {
+        margin-top: 14px;
+        break-inside: avoid;
+      }
+
+      .section-title {
+        margin: 0 0 8px;
+        font-size: 13pt;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .assumption-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px 16px;
+      }
+
+      .card {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 9px 10px;
+        background: #ffffff;
+        min-height: 58px;
+      }
+
+      .label {
+        display: block;
+        font-size: 8.5pt;
+        color: #64748b;
+        margin-bottom: 4px;
+      }
+
+      .value {
+        display: block;
+        font-size: 13pt;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .value-small {
+        display: block;
+        font-size: 10.5pt;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .verdict-box {
+        border: 1px solid #a7f3d0;
+        background: #ecfdf5;
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+
+      .verdict-label {
+        display: inline-block;
+        border-radius: 999px;
+        background: #047857;
+        color: #ffffff;
+        padding: 4px 8px;
+        font-size: 8.5pt;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .compact-list {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+
+      .compact-list li {
+        margin: 2px 0;
+      }
+
+      .footer {
+        margin-top: 16px;
+        border-top: 1px solid #cbd5e1;
+        padding-top: 8px;
+        font-size: 8.5pt;
+        color: #64748b;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      @media print {
+        body {
+          print-color-adjust: exact;
+          -webkit-print-color-adjust: exact;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <div>
+          <div class="brand">homebatterysavings.co.uk</div>
+          <h1>UK Home Battery Savings Estimate</h1>
+        </div>
+
+        <div class="meta">
+          <div>Generated: ${generatedDate}</div>
+          <div>Estimate only</div>
+        </div>
+      </header>
+
+      <p class="notice">
+        This estimate is a simplified guide only. Check real tariff rates, quote details, battery specification and warranty terms before buying.
+      </p>
+
+      <section class="section">
+        <h2 class="section-title">Estimated result</h2>
+
+        <div class="result-grid">
+          <div class="card">
+            <span class="label">Annual saving</span>
+            <span class="value">${formatCurrency(results.annualSaving)}</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Monthly saving</span>
+            <span class="value">${formatCurrency(results.monthlySaving)}</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Payback period</span>
+            <span class="value">${formatYears(results.paybackYears)}</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Verdict</span>
+            <span class="value-small">${verdict.label}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Input assumptions</h2>
+
+        <div class="assumption-grid">
+          <div class="card">
+            <span class="label">Battery capacity</span>
+            <span class="value-small">${inputs.batteryCapacityKwh} kWh</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Useful peak usage</span>
+            <span class="value-small">${inputs.peakUsageCoveredKwh} kWh</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Installed cost</span>
+            <span class="value-small">${formatCurrency(inputs.installedCost)}</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Warranty period</span>
+            <span class="value-small">${inputs.warrantyYears} years</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Peak rate</span>
+            <span class="value-small">${inputs.peakRatePence}p/kWh</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Off-peak rate</span>
+            <span class="value-small">${inputs.offPeakRatePence}p/kWh</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Efficiency</span>
+            <span class="value-small">${inputs.efficiencyPercent}%</span>
+          </div>
+
+          <div class="card">
+            <span class="label">Cycles per year</span>
+            <span class="value-small">${inputs.cyclesPerYear}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Calculation detail</h2>
+
+        <div class="detail-grid">
+          <div>Useful battery energy per cycle: <strong>${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh</strong></div>
+          <div>Off-peak energy needed per cycle: <strong>${results.offPeakEnergyNeededPerCycle.toFixed(1)} kWh</strong></div>
+          <div>Peak cost avoided per cycle: <strong>${formatCurrencyPrecise(results.peakCostAvoidedPerCycle)}</strong></div>
+          <div>Off-peak charging cost per cycle: <strong>${formatCurrencyPrecise(results.offPeakChargingCostPerCycle)}</strong></div>
+          <div>Saving per cycle: <strong>${formatCurrencyPrecise(results.savingPerCycle)}</strong></div>
+          <div>Break-even battery cost: <strong>${formatCurrency(results.breakEvenBatteryCost)}</strong></div>
+        </div>
+      </section>
+
+      <section class="section verdict-box">
+        <span class="verdict-label">${verdict.label}</span>
+        <div>${verdict.summary}</div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Before accepting a quote, ask</h2>
+
+        <ul class="compact-list">
+          <li>What is the total installed cost including VAT?</li>
+          <li>What is the usable battery capacity, not just nominal capacity?</li>
+          <li>What warranty period and cycle limit apply?</li>
+          <li>What tariff assumptions are used in the savings estimate?</li>
+          <li>Does the system include backup power, or is that extra?</li>
+        </ul>
+      </section>
+
+      <footer class="footer">
+        <span>Generated from homebatterysavings.co.uk</span>
+        <span>Use as an estimate only</span>
+      </footer>
+    </main>
+
+    <script>
+      window.onload = function () {
+        window.focus();
+        window.print();
+      };
+    </script>
+  </body>
+  </html>
+  `;
+
+    printWindow.document.open();
+    printWindow.document.write(estimateHtml);
+    printWindow.document.close();
+  }
+
   const hasPositiveSaving = results.annualSaving > 0;
 
   return (
@@ -291,7 +621,7 @@ export default function BatterySavingsCalculator() {
           overnight and using the battery during peak-rate hours.
         </p>
 
-        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="no-print mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <a
             href="#calculator-inputs"
             className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
@@ -311,7 +641,7 @@ export default function BatterySavingsCalculator() {
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr]">
         <div
           id="calculator-inputs"
-          className="scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+          className="no-print scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
         >
           <h3 className="text-xl font-bold text-slate-950">
             Your assumptions
@@ -460,7 +790,7 @@ export default function BatterySavingsCalculator() {
           </div>
         </div>
 
-        <div id="calculator-result" className="scroll-mt-24 space-y-5">
+        <div id="calculator-result" className="no-print scroll-mt-24 space-y-5">
           <div className="rounded-3xl bg-slate-950 p-6 text-white shadow-sm">
             <p className="text-sm font-medium uppercase tracking-wide text-emerald-300">
               Estimated result
@@ -626,6 +956,15 @@ export default function BatterySavingsCalculator() {
                     : shareLinkStatus === "failed"
                       ? "Copy failed"
                       : "Copy link"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={printEstimate}
+                  aria-label="Print or save this battery estimate"
+                  className="inline-flex w-fit rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
+                >
+                  Print estimate
                 </button>
               </div>
 
