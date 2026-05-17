@@ -19,6 +19,7 @@ export default function IsAHomeBatteryWorthItPage() {
       description="A home battery can make sense for some households, but the answer depends heavily on your tariff, battery cost, usage pattern and whether you can charge cheaply."
     >
       <div className="guide-content space-y-8">
+        <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>
         <section>
           <h2>The short answer</h2>
           <p>

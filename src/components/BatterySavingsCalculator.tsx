@@ -11,6 +11,7 @@ import {
 } from "@/lib/batteryShareUrl";
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { getBatteryWarnings } from "@/lib/batteryWarnings";
+import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
 import { useEffect, useMemo, useState } from "react";
 
 function formatCurrency(value: number) {
@@ -158,7 +159,7 @@ function getWarningClasses(tone: string) {
   }
 }
 
-const defaultBatteryInputs: BatteryCalculatorInputs = {
+const defaultBatteryInputs: BatteryCalculatorInputs = sanitizeBatteryInputs({
   batteryCapacityKwh: 10,
   peakUsageCoveredKwh: 8,
   installedCost: 5000,
@@ -167,7 +168,7 @@ const defaultBatteryInputs: BatteryCalculatorInputs = {
   efficiencyPercent: 90,
   cyclesPerYear: 300,
   warrantyYears: 10,
-};
+});
 
 export default function BatterySavingsCalculator() {
   const [inputs, setInputs] =
@@ -218,7 +219,7 @@ export default function BatterySavingsCalculator() {
   }, [inputs, results]);
 
   function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
-    setInputs({ ...presetInputs });
+    setInputs(sanitizeBatteryInputs(presetInputs));
     setSelectedPresetId(presetId);
   }
 
@@ -226,10 +227,12 @@ export default function BatterySavingsCalculator() {
     key: Key,
     value: BatteryCalculatorInputs[Key]
   ) {
-    setInputs((currentInputs) => ({
-      ...currentInputs,
-      [key]: value,
-    }));
+    setInputs((currentInputs) =>
+      sanitizeBatteryInputs({
+        ...currentInputs,
+        [key]: value,
+      })
+    );
 
     setSelectedPresetId("custom");
   }
@@ -491,6 +494,10 @@ export default function BatterySavingsCalculator() {
               This estimate compares the peak-rate energy avoided against the
               off-peak energy needed to charge the battery, including battery
               efficiency loss.
+            </p>
+            <p className="mt-3 text-xs leading-5 text-slate-400">
+              Estimate only. Check real tariff rates, quote details and warranty terms
+              before buying.
             </p>
           </div>
 

@@ -1,4 +1,5 @@
 import type { BatteryCalculatorInputs } from "@/lib/batteryCalculator";
+import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
 
 const batteryInputQueryKeys = {
   batteryCapacityKwh: "cap",
@@ -12,13 +13,17 @@ const batteryInputQueryKeys = {
 } as const;
 
 export function encodeBatteryInputs(inputs: BatteryCalculatorInputs) {
+  const sanitizedInputs = sanitizeBatteryInputs(inputs);
   const params = new URLSearchParams();
 
-  Object.entries(batteryInputQueryKeys).forEach(([inputKey, queryKey]) => {
-    const value = inputs[inputKey as keyof BatteryCalculatorInputs];
-
-    params.set(queryKey, String(value));
-  });
+  params.set("cap", String(sanitizedInputs.batteryCapacityKwh));
+  params.set("peakUse", String(sanitizedInputs.peakUsageCoveredKwh));
+  params.set("cost", String(sanitizedInputs.installedCost));
+  params.set("peak", String(sanitizedInputs.peakRatePence));
+  params.set("offPeak", String(sanitizedInputs.offPeakRatePence));
+  params.set("eff", String(sanitizedInputs.efficiencyPercent));
+  params.set("cycles", String(sanitizedInputs.cyclesPerYear));
+  params.set("warranty", String(sanitizedInputs.warrantyYears));
 
   return params.toString();
 }
@@ -43,17 +48,32 @@ export function parseBatteryInputsFromSearchParams(
   params: URLSearchParams,
   defaultInputs: BatteryCalculatorInputs
 ): BatteryCalculatorInputs | null {
-  let foundAnyBatteryParam = false;
-  const parsedInputs: BatteryCalculatorInputs = { ...defaultInputs };
+  const foundAnyBatteryParam = Object.values(batteryInputQueryKeys).some(
+    (queryKey) => params.has(queryKey)
+  );
 
-  Object.entries(batteryInputQueryKeys).forEach(([inputKey, queryKey]) => {
-    const parsedValue = getNumberParam(params, queryKey);
+  if (!foundAnyBatteryParam) {
+    return null;
+  }
 
-    if (parsedValue !== null) {
-      foundAnyBatteryParam = true;
-      parsedInputs[inputKey as keyof BatteryCalculatorInputs] = parsedValue;
-    }
-  });
+  const parsedInputs: BatteryCalculatorInputs = {
+    batteryCapacityKwh:
+      getNumberParam(params, "cap") ?? defaultInputs.batteryCapacityKwh,
+    peakUsageCoveredKwh:
+      getNumberParam(params, "peakUse") ?? defaultInputs.peakUsageCoveredKwh,
+    installedCost:
+      getNumberParam(params, "cost") ?? defaultInputs.installedCost,
+    peakRatePence:
+      getNumberParam(params, "peak") ?? defaultInputs.peakRatePence,
+    offPeakRatePence:
+      getNumberParam(params, "offPeak") ?? defaultInputs.offPeakRatePence,
+    efficiencyPercent:
+      getNumberParam(params, "eff") ?? defaultInputs.efficiencyPercent,
+    cyclesPerYear:
+      getNumberParam(params, "cycles") ?? defaultInputs.cyclesPerYear,
+    warrantyYears:
+      getNumberParam(params, "warranty") ?? defaultInputs.warrantyYears,
+  };
 
-  return foundAnyBatteryParam ? parsedInputs : null;
+  return sanitizeBatteryInputs(parsedInputs);
 }

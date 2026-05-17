@@ -63,4 +63,46 @@ describe("batteryShareUrl", () => {
 
     expect(parsedInputs).toBeNull();
   });
+
+    it("merges partial query parameters with default inputs", () => {
+    const params = new URLSearchParams("cap=5&cost=4500");
+
+    const parsedInputs = parseBatteryInputsFromSearchParams(
+      params,
+      defaultInputs
+    );
+
+    expect(parsedInputs).toEqual({
+      batteryCapacityKwh: 5,
+      peakUsageCoveredKwh: 8,
+      installedCost: 4500,
+      peakRatePence: 28,
+      offPeakRatePence: 7,
+      efficiencyPercent: 90,
+      cyclesPerYear: 300,
+      warrantyYears: 10,
+    });
+  });
+
+  it("ignores invalid values and sanitises unsafe values", () => {
+    const params = new URLSearchParams(
+      "cap=bad&peakUse=-50&cost=-5000&peak=-20&offPeak=500&eff=999&cycles=999&warranty=100"
+    );
+
+    const parsedInputs = parseBatteryInputsFromSearchParams(
+      params,
+      defaultInputs
+    );
+
+    expect(parsedInputs).toEqual({
+      batteryCapacityKwh: 10,
+      peakUsageCoveredKwh: 0,
+      installedCost: 0,
+      peakRatePence: 0,
+      offPeakRatePence: 200,
+      efficiencyPercent: 100,
+      cyclesPerYear: 365,
+      warrantyYears: 30,
+    });
+  });
 });

@@ -19,6 +19,7 @@ export default function HomeBatteryWithoutSolarPage() {
       description="A home battery does not always need solar panels. Some households use cheap overnight electricity to charge a battery, then use that stored energy during more expensive hours."
     >
       <div className="guide-content space-y-8">
+        <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>
         <section>
           <h2>Can you use a home battery without solar?</h2>
           <p>

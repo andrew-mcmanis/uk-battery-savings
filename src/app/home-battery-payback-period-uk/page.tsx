@@ -1,6 +1,6 @@
+import GuidePageLayout from "@/components/GuidePageLayout";
 import type { Metadata } from "next";
 import Link from "next/link";
-import GuidePageLayout from "@/components/GuidePageLayout";
 
 export const metadata: Metadata = {
   title: "Home Battery Payback Period UK",
@@ -19,6 +19,7 @@ export default function HomeBatteryPaybackPeriodPage() {
       description="The payback period is the rough number of years it takes for estimated savings to recover the installed battery cost."
     >
       <div className="guide-content space-y-8">
+        <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>
         <section>
           <h2>The basic payback formula</h2>
           <p>The simple formula is:</p>

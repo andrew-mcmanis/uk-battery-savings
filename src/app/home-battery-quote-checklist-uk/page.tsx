@@ -19,6 +19,7 @@ export default function HomeBatteryQuoteChecklistPage() {
       description="Use this checklist before accepting a home battery quote so you understand the true installed cost, usable capacity, warranty and likely savings."
     >
       <div className="guide-content space-y-8">
+        <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>
         <section>
           <h2>Before you compare quotes</h2>
           <p>
