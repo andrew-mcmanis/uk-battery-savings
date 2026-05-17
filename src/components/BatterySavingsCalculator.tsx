@@ -348,6 +348,7 @@ export default function BatterySavingsCalculator() {
                   <button
                     key={preset.id}
                     type="button"
+                    aria-pressed={isSelected}
                     onClick={() => applyPreset(preset.id, preset.inputs)}
                     className={`rounded-xl border p-4 text-left transition ${
                       isSelected
@@ -464,7 +465,7 @@ export default function BatterySavingsCalculator() {
               Estimated result
             </p>
 
-            <h3 className="mt-3 text-3xl font-bold">
+            <h3 className="mt-3 text-3xl font-bold" aria-live="polite">
               {hasPositiveSaving
                 ? `${formatCurrency(results.annualSaving)} per year`
                 : "No estimated saving"}
@@ -595,6 +596,7 @@ export default function BatterySavingsCalculator() {
                 <button
                   type="button"
                   onClick={copyResultSummary}
+                  aria-label="Copy battery savings result summary"
                   className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
                 >
                   {copyStatus === "copied"
@@ -607,6 +609,7 @@ export default function BatterySavingsCalculator() {
                 <button
                   type="button"
                   onClick={copyShareLink}
+                  aria-label="Copy shareable battery calculator link"
                   className="inline-flex w-fit rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 hover:bg-slate-50"
                 >
                   {shareLinkStatus === "copied"
@@ -616,6 +619,18 @@ export default function BatterySavingsCalculator() {
                       : "Copy link"}
                 </button>
               </div>
+
+              <span className="sr-only" aria-live="polite">
+                {copyStatus === "copied"
+                  ? "Result copied to clipboard"
+                  : copyStatus === "failed"
+                    ? "Result copy failed"
+                    : shareLinkStatus === "copied"
+                      ? "Share link copied to clipboard"
+                      : shareLinkStatus === "failed"
+                        ? "Share link copy failed"
+                        : ""}
+              </span>
             </div>
 
             <div className="mt-5 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">

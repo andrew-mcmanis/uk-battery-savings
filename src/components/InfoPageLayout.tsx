@@ -16,7 +16,7 @@ export default function InfoPageLayout({
   children,
 }: InfoPageLayoutProps) {
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+    <main id="main-content" className="min-h-screen bg-slate-50 text-slate-900">
       <SiteHeader />
 
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
