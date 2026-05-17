@@ -2,6 +2,11 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { guides } from "@/data/guides";
+import StructuredData from "@/components/StructuredData";
+import {
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+} from "@/lib/structuredData";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,8 +20,21 @@ export const metadata: Metadata = {
 };
 
 export default function GuidesPage() {
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Guides", path: "/guides" },
+  ]);
+
+  const collectionPageSchema = buildCollectionPageSchema({
+    name: "UK home battery guides",
+    description:
+      "Practical UK home battery guides covering savings, payback period, off-peak charging, batteries without solar and quote checks.",
+    path: "/guides",
+  });
+
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
+     <main className="min-h-screen bg-slate-50 text-slate-900">
+      <StructuredData data={[breadcrumbSchema, collectionPageSchema]} />
       <SiteHeader />
 
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">

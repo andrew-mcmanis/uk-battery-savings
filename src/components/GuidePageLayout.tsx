@@ -1,9 +1,14 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedGuides from "@/components/RelatedGuides";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import Link from "next/link";
-import type { ReactNode } from "react";
+import StructuredData from "@/components/StructuredData";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+} from "@/lib/structuredData";
 
 type GuidePageLayoutProps = {
   eyebrow: string;
@@ -20,8 +25,21 @@ export default function GuidePageLayout({
   currentPath,
   children,
 }: GuidePageLayoutProps) {
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Guides", path: "/guides" },
+    { name: title, path: currentPath },
+  ]);
+
+  const articleSchema = buildArticleSchema({
+    headline: title,
+    description,
+    path: currentPath,
+  });
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
+      <StructuredData data={[breadcrumbSchema, articleSchema]} />
       <SiteHeader />
 
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
