@@ -2,6 +2,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { guides } from "@/data/guides";
+import GuideCard from "@/components/GuideCard";
 import StructuredData from "@/components/StructuredData";
 import {
   buildBreadcrumbSchema,
@@ -69,25 +70,14 @@ export default function GuidesPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {guides.map((guide) => (
-            <Link
+            <GuideCard
               key={guide.href}
+              title={guide.title}
+              description={guide.description}
               href={guide.href}
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md"
-            >
-              <h2 className="text-lg font-bold text-slate-950">
-                {guide.title}
-              </h2>
-
-              <p className="mt-3 text-sm leading-6 text-slate-600">
-                {guide.description}
-              </p>
-
-              <p className="mt-5 text-sm font-semibold text-emerald-700">
-                Read guide →
-              </p>
-            </Link>
+            />
           ))}
         </div>
       </section>

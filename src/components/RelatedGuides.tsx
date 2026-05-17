@@ -1,5 +1,5 @@
+import GuideCard from "@/components/GuideCard";
 import { guides } from "@/data/guides";
-import Link from "next/link";
 
 type RelatedGuidesProps = {
   currentPath: string;
@@ -31,23 +31,14 @@ export default function RelatedGuides({ currentPath }: RelatedGuidesProps) {
         </p>
       </div>
 
-      <div className="mt-6 grid gap-5 md:grid-cols-3">
+      <div className="mt-6 grid items-stretch gap-5 md:grid-cols-3">
         {relatedGuides.map((guide) => (
-          <Link
+          <GuideCard
             key={guide.href}
+            title={guide.title}
+            description={guide.description}
             href={guide.href}
-            className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 transition hover:-translate-y-1 hover:bg-white hover:shadow-sm"
-          >
-            <h3 className="font-bold text-slate-950">{guide.title}</h3>
-
-            <p className="mt-2 text-sm leading-6 text-slate-600">
-              {guide.description}
-            </p>
-
-            <p className="mt-4 text-sm font-semibold text-emerald-700">
-              Read guide →
-            </p>
-          </Link>
+          />
         ))}
       </div>
     </section>
