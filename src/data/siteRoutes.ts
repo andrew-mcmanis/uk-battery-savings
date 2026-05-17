@@ -97,3 +97,10 @@ export const publicRoutes: PublicRoute[] = [
     priority: 0.75,
   },
 ];
+
+export const sectionPaths = {
+  calculator: `${routePaths.home}#calculator`,
+  calculatorInputs: `${routePaths.home}#calculator-inputs`,
+  calculatorResult: `${routePaths.home}#calculator-result`,
+  howItWorks: `${routePaths.home}#how-it-works`,
+} as const;

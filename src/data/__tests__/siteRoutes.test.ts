@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { guides } from "@/data/guides";
-import { publicRoutes, routePaths } from "@/data/siteRoutes";
+import { publicRoutes, routePaths, sectionPaths } from "@/data/siteRoutes";
+
 
 describe("siteRoutes", () => {
   it("has unique public routes", () => {
@@ -44,5 +45,18 @@ describe("siteRoutes", () => {
     expect(publicRouteSet.has(routePaths.privacy)).toBe(true);
     expect(publicRouteSet.has(routePaths.disclaimer)).toBe(true);
     expect(publicRouteSet.has(routePaths.terms)).toBe(true);
+  });
+
+  it("has section paths that start from the homepage", () => {
+    expect(sectionPaths.calculator).toBe("/#calculator");
+    expect(sectionPaths.calculatorInputs).toBe("/#calculator-inputs");
+    expect(sectionPaths.calculatorResult).toBe("/#calculator-result");
+    expect(sectionPaths.howItWorks).toBe("/#how-it-works");
+  });
+
+  it("has section paths with hash fragments", () => {
+    Object.values(sectionPaths).forEach((path) => {
+      expect(path).toContain("#");
+    });
   });
 });

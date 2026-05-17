@@ -1,6 +1,7 @@
 import GuidePageLayout from "@/components/GuidePageLayout";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { sectionPaths } from "@/data/siteRoutes";
 
 export const metadata: Metadata = {
   title: "Is a Home Battery Worth It in the UK?",
@@ -111,7 +112,7 @@ export default function IsAHomeBatteryWorthItPage() {
           <p>
             Use the{" "}
             <Link
-              href="/#calculator"
+              href={sectionPaths.calculator}
               className="font-semibold text-emerald-700 hover:text-emerald-800"
             >
               home battery savings calculator

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { siteConfig } from "@/data/siteConfig";
-import { routePaths } from "@/data/siteRoutes";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 
 const navLinks = [
   {
     label: "Calculator",
-    href: `${routePaths.home}#calculator`,
+    href: sectionPaths.calculator,
   },
   {
     label: "Guides",
@@ -13,7 +13,7 @@ const navLinks = [
   },
   {
     label: "How it works",
-    href: `${routePaths.home}#how-it-works`,
+    href: sectionPaths.howItWorks,
   },
   {
     label: "About",
@@ -62,7 +62,7 @@ export default function SiteHeader() {
           </nav>
 
           <Link
-            href={`${routePaths.home}#calculator`}
+            href={sectionPaths.calculator}
             className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
           >
             Start

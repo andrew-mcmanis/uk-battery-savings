@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { guides } from "@/data/guides";
 import GuideCard from "@/components/GuideCard";
 import StructuredData from "@/components/StructuredData";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 import {
   buildBreadcrumbSchema,
   buildCollectionPageSchema,
@@ -42,7 +43,7 @@ export default function GuidesPage() {
         <div className="mx-auto max-w-4xl">
           <Breadcrumbs
             items={[
-              { label: "Home", href: "/" },
+              { label: "Home", href: routePaths.home },
               { label: "Guides" },
             ]}
           />
@@ -61,7 +62,7 @@ export default function GuidesPage() {
           </p>
 
           <Link
-            href="/#calculator"
+            href={sectionPaths.calculator}
             className="mt-8 inline-flex rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
           >
             Try the calculator
@@ -95,7 +96,7 @@ export default function GuidesPage() {
           </p>
 
           <Link
-            href="/#calculator"
+            href={sectionPaths.calculator}
             className="mt-5 inline-flex rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
           >
             Use the home battery savings calculator

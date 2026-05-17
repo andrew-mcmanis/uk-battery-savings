@@ -1,6 +1,7 @@
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Link from "next/link";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 
 export default function NotFound() {
   return (
@@ -24,14 +25,14 @@ export default function NotFound() {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/#calculator"
+              href={sectionPaths.calculator}
               className="rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
             >
               Use the calculator
             </Link>
 
             <Link
-              href="/guides"
+              href={routePaths.guides}
               className="rounded-xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/20 hover:bg-white/15"
             >
               View guides
@@ -48,7 +49,7 @@ export default function NotFound() {
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <Link
-              href="/"
+              href={routePaths.home}
               className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 hover:bg-white hover:shadow-sm"
             >
               <h3 className="font-bold text-slate-950">Homepage</h3>
@@ -58,7 +59,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href="/guides"
+              href={routePaths.guides}
               className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 hover:bg-white hover:shadow-sm"
             >
               <h3 className="font-bold text-slate-950">Guides</h3>
@@ -68,7 +69,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href="/home-battery-savings-examples-uk"
+              href={routePaths.batterySavingsExamples}
               className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 hover:bg-white hover:shadow-sm"
             >
               <h3 className="font-bold text-slate-950">Savings examples</h3>
@@ -78,7 +79,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href="/home-battery-quote-checklist-uk"
+              href={routePaths.batteryQuoteChecklist}
               className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 hover:bg-white hover:shadow-sm"
             >
               <h3 className="font-bold text-slate-950">Quote checklist</h3>

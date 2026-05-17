@@ -1,6 +1,7 @@
 import Link from "next/link";
 import GuideCard from "@/components/GuideCard";
 import { guides } from "@/data/guides";
+import { routePaths } from "@/data/siteRoutes";
 
 export default function GuidesSection() {
   return (
@@ -34,7 +35,7 @@ export default function GuidesSection() {
 
       <div className="mt-8">
         <Link
-          href="/guides"
+          href={routePaths.guides}
           className="inline-flex rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
         >
           View all guides

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { sectionPaths } from "@/data/siteRoutes";
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
@@ -39,7 +40,7 @@ export default function ErrorPage({ reset }: ErrorPageProps) {
             </button>
 
             <Link
-              href="/#calculator"
+              href={sectionPaths.calculator}
               className="rounded-xl bg-white/10 px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/20 hover:bg-white/15"
             >
               Use the calculator

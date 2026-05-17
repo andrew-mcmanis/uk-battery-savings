@@ -17,6 +17,7 @@ import {
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { getBatteryWarnings } from "@/lib/batteryWarnings";
 import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 import { useEffect, useMemo, useState } from "react";
 
 type NumberInputProps = {
@@ -250,7 +251,7 @@ export default function BatterySavingsCalculator() {
 
   async function copyShareLink() {
     const queryString = encodeBatteryInputs(inputs);
-    const shareUrl = `${window.location.origin}${window.location.pathname}?${queryString}#calculator-result`;
+    const shareUrl = `${window.location.origin}${routePaths.home}?${queryString}${sectionPaths.calculatorResult.replace(routePaths.home, "")}`;
 
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -483,7 +484,7 @@ export default function BatterySavingsCalculator() {
             </p>
 
             <a
-              href="/methodology"
+              href={routePaths.methodology}
               className="mt-3 inline-flex text-xs font-semibold text-emerald-300 hover:text-emerald-200"
             >
               See how this is calculated →
@@ -659,7 +660,7 @@ export default function BatterySavingsCalculator() {
             </div>
 
             <a
-              href="/home-battery-quote-checklist-uk"
+              href={routePaths.batteryQuoteChecklist}
               className="mt-5 inline-flex text-sm font-semibold text-emerald-700 hover:text-emerald-800"
             >
               Read the full quote checklist →
