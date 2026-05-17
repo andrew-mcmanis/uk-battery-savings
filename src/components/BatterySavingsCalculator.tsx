@@ -5,9 +5,13 @@ import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
 } from "@/lib/batteryCalculator";
+import {
+  encodeBatteryInputs,
+  parseBatteryInputsFromSearchParams,
+} from "@/lib/batteryShareUrl";
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { getBatteryWarnings } from "@/lib/batteryWarnings";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-GB", {
@@ -154,23 +158,50 @@ function getWarningClasses(tone: string) {
   }
 }
 
+const defaultBatteryInputs: BatteryCalculatorInputs = {
+  batteryCapacityKwh: 10,
+  peakUsageCoveredKwh: 8,
+  installedCost: 5000,
+  peakRatePence: 28,
+  offPeakRatePence: 7,
+  efficiencyPercent: 90,
+  cyclesPerYear: 300,
+  warrantyYears: 10,
+};
+
 export default function BatterySavingsCalculator() {
-  const [inputs, setInputs] = useState<BatteryCalculatorInputs>({
-    batteryCapacityKwh: 10,
-    peakUsageCoveredKwh: 8,
-    installedCost: 5000,
-    peakRatePence: 28,
-    offPeakRatePence: 7,
-    efficiencyPercent: 90,
-    cyclesPerYear: 300,
-    warrantyYears: 10,
-  });
+  const [inputs, setInputs] =
+    useState<BatteryCalculatorInputs>(defaultBatteryInputs);
 
   const [selectedPresetId, setSelectedPresetId] = useState<string>("typical");
 
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
     "idle"
   );
+
+  const [shareLinkStatus, setShareLinkStatus] = useState<
+    "idle" | "copied" | "failed"
+  >("idle");
+
+  useEffect(() => {
+    const parsedInputs = parseBatteryInputsFromSearchParams(
+      new URLSearchParams(window.location.search),
+      defaultBatteryInputs
+    );
+
+    if (!parsedInputs) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setInputs(parsedInputs);
+      setSelectedPresetId("custom");
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   const results = useMemo(() => {
     return calculateBatterySavings(inputs);
@@ -230,6 +261,26 @@ export default function BatterySavingsCalculator() {
 
       window.setTimeout(() => {
         setCopyStatus("idle");
+      }, 2500);
+    }
+  }
+
+  async function copyShareLink() {
+    const queryString = encodeBatteryInputs(inputs);
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${queryString}#calculator-result`;
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareLinkStatus("copied");
+
+      window.setTimeout(() => {
+        setShareLinkStatus("idle");
+      }, 2500);
+    } catch {
+      setShareLinkStatus("failed");
+
+      window.setTimeout(() => {
+        setShareLinkStatus("idle");
       }, 2500);
     }
   }
@@ -553,17 +604,31 @@ export default function BatterySavingsCalculator() {
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={copyResultSummary}
-                className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-              >
-                {copyStatus === "copied"
-                  ? "Copied"
-                  : copyStatus === "failed"
-                    ? "Copy failed"
-                    : "Copy result"}
-              </button>
+              <div className="flex flex-col gap-2 sm:items-end">
+                <button
+                  type="button"
+                  onClick={copyResultSummary}
+                  className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  {copyStatus === "copied"
+                    ? "Copied"
+                    : copyStatus === "failed"
+                      ? "Copy failed"
+                      : "Copy result"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={copyShareLink}
+                  className="inline-flex w-fit rounded-xl bg-white px-4 py-2 text-sm font-semibold text-slate-950 ring-1 ring-slate-200 hover:bg-slate-50"
+                >
+                  {shareLinkStatus === "copied"
+                    ? "Link copied"
+                    : shareLinkStatus === "failed"
+                      ? "Copy failed"
+                      : "Copy link"}
+                </button>
+              </div>
             </div>
 
             <div className="mt-5 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
