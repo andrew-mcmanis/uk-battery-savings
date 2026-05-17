@@ -35,16 +35,19 @@ export default function PrivacyPage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-slate-950">Analytics</h2>
+        <h2 className="text-2xl font-bold text-slate-950">Analytics and performance</h2>
         <p className="mt-3">
           This website uses Vercel Web Analytics to understand basic site usage,
           such as page views, top pages, referrers, device type and general location
           information.
         </p>
         <p className="mt-3">
-          Vercel Web Analytics does not use third-party cookies. It is used to help
-          improve the site and understand which calculator and guide pages are useful
-          to visitors.
+          This website also uses Vercel Speed Insights to understand real-world page
+          performance and help identify slow pages or layout issues.
+        </p>
+        <p className="mt-3">
+          These tools are used to improve the site and understand which calculator and
+          guide pages are useful to visitors.
         </p>
       </div>
 
