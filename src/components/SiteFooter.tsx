@@ -23,6 +23,10 @@ const footerLinks = [
     href: "/home-battery-payback-period-uk",
   },
   {
+    label: "Savings examples",
+    href: "/home-battery-savings-examples-uk",
+  },
+  {
     label: "Quote checklist",
     href: "/home-battery-quote-checklist-uk",
   },

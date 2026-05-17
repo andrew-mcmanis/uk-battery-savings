@@ -18,6 +18,12 @@ export const guides = [
     href: "/home-battery-payback-period-uk",
   },
   {
+    title: "Home battery savings examples",
+    description:
+      "Compare small, typical and high-usage examples to see how assumptions change estimated savings.",
+    href: "/home-battery-savings-examples-uk",
+  },
+  {
     title: "Home battery quote checklist",
     description:
       "Know what to ask before accepting a battery quote, including warranty, usable capacity and savings assumptions.",

@@ -9,35 +9,15 @@ import {
   encodeBatteryInputs,
   parseBatteryInputsFromSearchParams,
 } from "@/lib/batteryShareUrl";
+import {
+  formatCurrency,
+  formatCurrencyPrecise,
+  formatYears,
+} from "@/lib/formatters";
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { getBatteryWarnings } from "@/lib/batteryWarnings";
 import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
 import { useEffect, useMemo, useState } from "react";
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatCurrencyPrecise(value: number) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
-function formatYears(value: number | null) {
-  if (value === null || !Number.isFinite(value)) {
-    return "Not profitable";
-  }
-
-  return `${value.toFixed(1)} years`;
-}
 
 type NumberInputProps = {
   label: string;
