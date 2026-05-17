@@ -19,6 +19,12 @@ const guides = [
       "See how installed cost and annual saving combine to produce a simple payback estimate.",
     href: "/home-battery-payback-period-uk",
   },
+  {
+  title: "Home battery quote checklist",
+  description:
+    "Know what to ask before accepting a battery quote, including warranty, usable capacity and savings assumptions.",
+  href: "/home-battery-quote-checklist-uk",
+  },
 ];
 
 export default function GuidesSection() {
@@ -40,7 +46,7 @@ export default function GuidesSection() {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-5 md:grid-cols-3">
+      <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         {guides.map((guide) => (
           <Link
             key={guide.href}

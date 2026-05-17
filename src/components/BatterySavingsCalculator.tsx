@@ -142,6 +142,10 @@ export default function BatterySavingsCalculator() {
 
   const [selectedPresetId, setSelectedPresetId] = useState<string>("typical");
 
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+    "idle"
+);
+
   const results = useMemo(() => {
     return calculateBatterySavings(inputs);
   }, [inputs]);
@@ -167,6 +171,37 @@ export default function BatterySavingsCalculator() {
     }));
 
     setSelectedPresetId("custom");
+  }
+
+  async function copyResultSummary() {
+    const summary = [
+      "Home battery savings estimate",
+      `Annual saving: ${formatCurrency(results.annualSaving)}`,
+      `Monthly saving: ${formatCurrency(results.monthlySaving)}`,
+      `Payback period: ${formatYears(results.paybackYears)}`,
+      `Battery capacity: ${inputs.batteryCapacityKwh} kWh`,
+      `Useful peak-period usage: ${inputs.peakUsageCoveredKwh} kWh`,
+      `Peak rate: ${inputs.peakRatePence}p/kWh`,
+      `Off-peak rate: ${inputs.offPeakRatePence}p/kWh`,
+      `Battery efficiency: ${inputs.efficiencyPercent}%`,
+      `Cycles per year: ${inputs.cyclesPerYear}`,
+      `Verdict: ${verdict.label}`,
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(summary);
+      setCopyStatus("copied");
+
+      window.setTimeout(() => {
+        setCopyStatus("idle");
+      }, 2500);
+    } catch {
+      setCopyStatus("failed");
+
+      window.setTimeout(() => {
+        setCopyStatus("idle");
+      }, 2500);
+    }
   }
 
   const hasPositiveSaving = results.annualSaving > 0;
@@ -384,6 +419,57 @@ export default function BatterySavingsCalculator() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+                  Next step
+                </p>
+
+                <h3 className="mt-2 text-xl font-bold text-slate-950">
+                  Check any quote against these assumptions
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  If you request a home battery quote, compare the installer&apos;s numbers
+                  against the assumptions used here: installed cost, usable capacity,
+                  warranty, tariff rates, battery efficiency and expected yearly cycles.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={copyResultSummary}
+                className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                {copyStatus === "copied"
+                  ? "Copied"
+                  : copyStatus === "failed"
+                    ? "Copy failed"
+                    : "Copy result"}
+              </button>
+            </div>
+
+            <div className="mt-5 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+              <p className="font-semibold text-slate-950">Before accepting a quote, ask:</p>
+
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                <li>What is the total installed cost including VAT?</li>
+                <li>What is the usable battery capacity, not just nominal capacity?</li>
+                <li>What warranty period and cycle limit apply?</li>
+                <li>What tariff assumptions are used in the savings estimate?</li>
+                <li>Does the system include backup power, or is that extra?</li>
+              </ul>
+            </div>
+
+            <a
+              href="/home-battery-quote-checklist-uk"
+              className="mt-5 inline-flex text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              Read the full quote checklist →
+            </a>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">

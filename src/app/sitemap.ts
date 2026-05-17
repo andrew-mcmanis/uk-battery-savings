@@ -10,6 +10,7 @@ const routes = [
   "/is-a-home-battery-worth-it-uk",
   "/home-battery-without-solar-uk",
   "/home-battery-payback-period-uk",
+  "/home-battery-quote-checklist-uk",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

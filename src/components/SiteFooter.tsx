@@ -15,6 +15,10 @@ const footerLinks = [
     href: "/home-battery-without-solar-uk",
   },
   {
+    label: "Quote checklist",
+    href: "/home-battery-quote-checklist-uk",
+  },
+  {
     label: "Privacy",
     href: "/privacy",
   },
