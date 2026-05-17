@@ -59,6 +59,9 @@ export default function PrivacyPage() {
           receiving the message.
         </p>
         <p className="mt-3">
+          The website itself does not store feedback messages in a database.
+        </p>
+        <p className="mt-3">
           You should avoid sending sensitive personal information, payment details,
           account numbers, private documents, or anything not needed to explain the
           feedback.
