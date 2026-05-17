@@ -17,6 +17,7 @@ export default function HomeBatteryPaybackPeriodPage() {
       eyebrow="Home battery guide"
       title="How to estimate a home battery payback period"
       description="The payback period is the rough number of years it takes for estimated savings to recover the installed battery cost."
+      currentPath="/home-battery-payback-period-uk"
     >
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>

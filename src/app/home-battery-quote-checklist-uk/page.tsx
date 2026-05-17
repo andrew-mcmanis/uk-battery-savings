@@ -17,6 +17,7 @@ export default function HomeBatteryQuoteChecklistPage() {
       eyebrow="Home battery guide"
       title="Home battery quote checklist UK"
       description="Use this checklist before accepting a home battery quote so you understand the true installed cost, usable capacity, warranty and likely savings."
+      currentPath="/home-battery-quote-checklist-uk"
     >
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>

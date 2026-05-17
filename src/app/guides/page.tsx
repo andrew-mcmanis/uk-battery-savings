@@ -1,5 +1,6 @@
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { guides } from "@/data/guides";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -20,7 +21,13 @@ export default function GuidesPage() {
 
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-300">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Guides" },
+            ]}
+          />
+         <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-emerald-300">
             Guides
           </p>
 

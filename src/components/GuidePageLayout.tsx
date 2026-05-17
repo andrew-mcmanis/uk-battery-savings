@@ -1,3 +1,5 @@
+import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedGuides from "@/components/RelatedGuides";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import Link from "next/link";
@@ -7,6 +9,7 @@ type GuidePageLayoutProps = {
   eyebrow: string;
   title: string;
   description: string;
+  currentPath: string;
   children: ReactNode;
 };
 
@@ -14,6 +17,7 @@ export default function GuidePageLayout({
   eyebrow,
   title,
   description,
+  currentPath,
   children,
 }: GuidePageLayoutProps) {
   return (
@@ -22,7 +26,15 @@ export default function GuidePageLayout({
 
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-300">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Guides", href: "/guides" },
+              { label: title },
+            ]}
+          />
+
+          <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-emerald-300">
             {eyebrow}
           </p>
 
@@ -68,6 +80,8 @@ export default function GuidePageLayout({
             Use the home battery savings calculator
           </Link>
         </div>
+
+        <RelatedGuides currentPath={currentPath} />
       </article>
 
       <SiteFooter />

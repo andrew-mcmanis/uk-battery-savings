@@ -17,6 +17,7 @@ export default function HomeBatteryWithoutSolarPage() {
       eyebrow="Home battery guide"
       title="Is a home battery worth it without solar?"
       description="A home battery does not always need solar panels. Some households use cheap overnight electricity to charge a battery, then use that stored energy during more expensive hours."
+      currentPath="/home-battery-without-solar-uk"
     >
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>

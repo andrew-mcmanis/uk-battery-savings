@@ -35,6 +35,7 @@ export default function HomeBatterySavingsExamplesPage() {
       eyebrow="Home battery examples"
       title="Home battery savings examples UK"
       description="Compare example home battery scenarios to understand how battery size, useful peak usage, tariff rates and installed cost affect payback."
+      currentPath="/home-battery-savings-examples-uk"
     >
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">

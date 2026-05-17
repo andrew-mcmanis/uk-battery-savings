@@ -17,6 +17,7 @@ export default function IsAHomeBatteryWorthItPage() {
       eyebrow="Home battery guide"
       title="Is a home battery worth it in the UK?"
       description="A home battery can make sense for some households, but the answer depends heavily on your tariff, battery cost, usage pattern and whether you can charge cheaply."
+      currentPath="/is-a-home-battery-worth-it-uk"
     >
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">Last updated: May 2026</p>
