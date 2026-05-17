@@ -476,10 +476,18 @@ export default function BatterySavingsCalculator() {
               off-peak energy needed to charge the battery, including battery
               efficiency loss.
             </p>
+
             <p className="mt-3 text-xs leading-5 text-slate-400">
               Estimate only. Check real tariff rates, quote details and warranty terms
               before buying.
             </p>
+
+            <a
+              href="/methodology"
+              className="mt-3 inline-flex text-xs font-semibold text-emerald-300 hover:text-emerald-200"
+            >
+              See how this is calculated →
+            </a>
           </div>
 
           <div

@@ -4,6 +4,7 @@ import type { MetadataRoute } from "next";
 const routes = [
   "",
   "/about",
+  "/methodology",
   "/guides",
   "/feedback",
   "/privacy",

@@ -7,6 +7,10 @@ const footerLinks = [
     href: "/about",
   },
   {
+    label: "Methodology",
+    href: "/methodology",
+  },
+  {
     label: "Guides",
     href: "/guides",
   },
