@@ -10,6 +10,11 @@ import SiteHeader from "@/components/SiteHeader";
 import TrustSection from "@/components/TrustSection";
 import { faqSchema } from "@/data/landingPageContent";
 import type { Metadata } from "next";
+import StructuredData from "@/components/StructuredData";
+import {
+  buildCalculatorWebApplicationSchema,
+  buildWebSiteSchema,
+} from "@/lib/structuredData";
 
 export const metadata: Metadata = {
   title: "UK Home Battery Savings Calculator",
@@ -40,14 +45,12 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  const webSiteSchema = buildWebSiteSchema();
+  const calculatorSchema = buildCalculatorWebApplicationSchema();
+
   return (
     <main id="main-content" className="min-h-screen bg-slate-50 text-slate-900">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema),
-        }}
-      />
+      <StructuredData data={[webSiteSchema, calculatorSchema, faqSchema]} />
 
       <SiteHeader />
       <HeroSection />
