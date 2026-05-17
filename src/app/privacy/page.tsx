@@ -49,6 +49,20 @@ export default function PrivacyPage() {
       </div>
 
       <div>
+        <h2 className="text-2xl font-bold text-slate-950">Feedback emails</h2>
+        <p className="mt-3">
+          If you choose to send feedback by email, the information you include in that
+          email will be handled by the email services involved in sending and
+          receiving the message.
+        </p>
+        <p className="mt-3">
+          You should avoid sending sensitive personal information, payment details,
+          account numbers, private documents, or anything not needed to explain the
+          feedback.
+        </p>
+      </div>
+
+      <div>
         <h2 className="text-2xl font-bold text-slate-950">Affiliate links</h2>
         <p className="mt-3">
           Affiliate links or partner links may be added later. If they are added,

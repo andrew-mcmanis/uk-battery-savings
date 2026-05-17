@@ -11,6 +11,10 @@ const footerLinks = [
     href: "/guides",
   },
   {
+    label: "Feedback",
+    href: "/feedback",
+  },
+  {
     label: "Is a battery worth it?",
     href: "/is-a-home-battery-worth-it-uk",
   },

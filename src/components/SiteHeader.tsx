@@ -19,6 +19,10 @@ const navLinks = [
     href: "/about",
   },
   {
+    label: "Feedback",
+    href: "/feedback",
+  },
+  {
     label: "Privacy",
     href: "/privacy",
   },
