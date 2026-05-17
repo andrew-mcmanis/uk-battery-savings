@@ -1,5 +1,5 @@
-import { siteConfig } from "@/data/siteConfig";
 import Link from "next/link";
+import { siteConfig } from "@/data/siteConfig";
 
 const navLinks = [
   {
@@ -11,21 +11,22 @@ const navLinks = [
     href: "/#how-it-works",
   },
   {
-    label: "Guides",
-    href: "/#guides",
-  },
-  {
     label: "About",
     href: "/about",
+  },
+  {
+    label: "Privacy",
+    href: "/privacy",
   },
 ];
 
 export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/95 text-white backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="font-bold tracking-tight">
-          {siteConfig.name}
+          <span className="sm:hidden">{siteConfig.shortName}</span>
+          <span className="hidden sm:inline">{siteConfig.name}</span>
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex">

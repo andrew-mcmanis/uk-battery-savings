@@ -1,10 +1,10 @@
 "use client";
 
+import { batteryPresets } from "@/data/batteryPresets";
 import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
 } from "@/lib/batteryCalculator";
-import { batteryPresets } from "@/data/batteryPresets";
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
 import { getBatteryWarnings } from "@/lib/batteryWarnings";
 import { useMemo, useState } from "react";
@@ -92,9 +92,11 @@ type ResultCardProps = {
 
 function ResultCard({ title, value, description }: ResultCardProps) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5">
       <p className="text-sm font-medium text-slate-500">{title}</p>
-      <p className="mt-2 text-3xl font-bold text-slate-950">{value}</p>
+      <p className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl">
+        {value}
+      </p>
       <p className="mt-2 text-sm text-slate-600">{description}</p>
     </div>
   );
@@ -168,7 +170,7 @@ export default function BatterySavingsCalculator() {
 
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
     "idle"
-);
+  );
 
   const results = useMemo(() => {
     return calculateBatterySavings(inputs);
@@ -253,10 +255,29 @@ export default function BatterySavingsCalculator() {
           calculator estimates how much money could be saved by charging
           overnight and using the battery during peak-rate hours.
         </p>
+
+        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+          <a
+            href="#calculator-inputs"
+            className="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
+          >
+            Edit assumptions
+          </a>
+
+          <a
+            href="#calculator-result"
+            className="rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-slate-200 hover:bg-slate-100"
+          >
+            View result
+          </a>
+        </div>
       </div>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr]">
-        <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+        <div
+          id="calculator-inputs"
+          className="scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+        >
           <h3 className="text-xl font-bold text-slate-950">
             Your assumptions
           </h3>
@@ -269,10 +290,12 @@ export default function BatterySavingsCalculator() {
           <div className="mt-6 rounded-2xl bg-emerald-50 p-5 ring-1 ring-emerald-100">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h4 className="font-semibold text-slate-950">Quick scenarios</h4>
+                <h4 className="font-semibold text-slate-950">
+                  Quick scenarios
+                </h4>
                 <p className="mt-1 text-sm text-slate-600">
-                  Start with a preset, then adjust the numbers to match your own quote or
-                  tariff.
+                  Start with a preset, then adjust the numbers to match your own
+                  quote or tariff.
                 </p>
               </div>
 
@@ -401,7 +424,7 @@ export default function BatterySavingsCalculator() {
           </div>
         </div>
 
-        <div className="space-y-5">
+        <div id="calculator-result" className="scroll-mt-24 space-y-5">
           <div className="rounded-3xl bg-slate-950 p-6 text-white shadow-sm">
             <p className="text-sm font-medium uppercase tracking-wide text-emerald-300">
               Estimated result
@@ -425,7 +448,7 @@ export default function BatterySavingsCalculator() {
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm font-semibold uppercase tracking-wide text-slate-600">
-              Result verdict
+                Result verdict
               </p>
 
               <span
@@ -435,13 +458,18 @@ export default function BatterySavingsCalculator() {
               </span>
             </div>
 
-            <p className={`mt-4 text-base leading-7 font-medium ${verdictClasses.text}`}>
+            <p
+              className={`mt-4 text-base font-medium leading-7 ${verdictClasses.text}`}
+            >
               {verdict.summary}
             </p>
 
             <ul className="mt-4 space-y-2">
               {verdict.points.map((point) => (
-                <li key={point} className="flex gap-3 text-sm leading-6 text-slate-700">
+                <li
+                  key={point}
+                  className="flex gap-3 text-sm leading-6 text-slate-700"
+                >
                   <span className="mt-2 h-1.5 w-1.5 rounded-full bg-slate-500" />
                   <span>{point}</span>
                 </li>
@@ -478,7 +506,9 @@ export default function BatterySavingsCalculator() {
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                          <h4 className={`font-semibold ${warningClasses.text}`}>
+                          <h4
+                            className={`font-semibold ${warningClasses.text}`}
+                          >
                             {warning.title}
                           </h4>
 
@@ -516,9 +546,10 @@ export default function BatterySavingsCalculator() {
                 </h3>
 
                 <p className="mt-3 text-sm leading-6 text-slate-600">
-                  If you request a home battery quote, compare the installer&apos;s numbers
-                  against the assumptions used here: installed cost, usable capacity,
-                  warranty, tariff rates, battery efficiency and expected yearly cycles.
+                  If you request a home battery quote, compare the
+                  installer&apos;s numbers against the assumptions used here:
+                  installed cost, usable capacity, warranty, tariff rates,
+                  battery efficiency and expected yearly cycles.
                 </p>
               </div>
 
@@ -536,11 +567,16 @@ export default function BatterySavingsCalculator() {
             </div>
 
             <div className="mt-5 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
-              <p className="font-semibold text-slate-950">Before accepting a quote, ask:</p>
+              <p className="font-semibold text-slate-950">
+                Before accepting a quote, ask:
+              </p>
 
               <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
                 <li>What is the total installed cost including VAT?</li>
-                <li>What is the usable battery capacity, not just nominal capacity?</li>
+                <li>
+                  What is the usable battery capacity, not just nominal
+                  capacity?
+                </li>
                 <li>What warranty period and cycle limit apply?</li>
                 <li>What tariff assumptions are used in the savings estimate?</li>
                 <li>Does the system include backup power, or is that extra?</li>
@@ -593,19 +629,36 @@ export default function BatterySavingsCalculator() {
             />
           </div>
 
-          <div className="rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-950 ring-1 ring-amber-200">
-            <p className="font-semibold">Important assumption</p>
-            <p className="mt-2">
+          <details className="group rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-950 ring-1 ring-amber-200">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
+              <span>Important assumption</span>
+              <span className="text-xs text-amber-800 group-open:hidden">
+                Show
+              </span>
+              <span className="hidden text-xs text-amber-800 group-open:inline">
+                Hide
+              </span>
+            </summary>
+
+            <p className="mt-3">
               This is a simplified estimate. It assumes the battery only saves
               money when it replaces electricity you would otherwise have bought
               at the peak rate. It does not include installation differences,
               battery degradation, export payments, solar generation, standing
               charges, VAT, finance costs or tariff exit fees.
             </p>
-          </div>
+          </details>
 
-          <div className="rounded-2xl bg-white p-5 text-sm leading-6 text-slate-700 shadow-sm ring-1 ring-slate-200">
-            <p className="font-semibold text-slate-950">Calculation detail</p>
+          <details className="group rounded-2xl bg-white p-5 text-sm leading-6 text-slate-700 shadow-sm ring-1 ring-slate-200">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-950">
+              <span>Calculation detail</span>
+              <span className="text-xs text-slate-500 group-open:hidden">
+                Show
+              </span>
+              <span className="hidden text-xs text-slate-500 group-open:inline">
+                Hide
+              </span>
+            </summary>
 
             <div className="mt-3 space-y-2">
               <p>
@@ -643,7 +696,7 @@ export default function BatterySavingsCalculator() {
                 </span>
               </p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
