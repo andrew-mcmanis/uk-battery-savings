@@ -1,11 +1,12 @@
 "use client";
 
-import { batteryPresets } from "@/data/batteryPresets";
 import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
 } from "@/lib/batteryCalculator";
+import { batteryPresets } from "@/data/batteryPresets";
 import { getBatteryVerdict } from "@/lib/batteryVerdict";
+import { getBatteryWarnings } from "@/lib/batteryWarnings";
 import { useMemo, useState } from "react";
 
 function formatCurrency(value: number) {
@@ -128,6 +129,29 @@ function getVerdictClasses(tone: string) {
   }
 }
 
+function getWarningClasses(tone: string) {
+  switch (tone) {
+    case "negative":
+      return {
+        container: "bg-red-50 ring-red-200",
+        badge: "bg-red-700 text-white",
+        text: "text-red-950",
+      };
+    case "warning":
+      return {
+        container: "bg-amber-50 ring-amber-200",
+        badge: "bg-amber-700 text-white",
+        text: "text-amber-950",
+      };
+    default:
+      return {
+        container: "bg-blue-50 ring-blue-200",
+        badge: "bg-blue-700 text-white",
+        text: "text-blue-950",
+      };
+  }
+}
+
 export default function BatterySavingsCalculator() {
   const [inputs, setInputs] = useState<BatteryCalculatorInputs>({
     batteryCapacityKwh: 10,
@@ -155,6 +179,10 @@ export default function BatterySavingsCalculator() {
   }, [inputs, results]);
 
   const verdictClasses = getVerdictClasses(verdict.tone);
+
+  const warnings = useMemo(() => {
+    return getBatteryWarnings({ inputs, results });
+  }, [inputs, results]);
 
   function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
     setInputs({ ...presetInputs });
@@ -420,6 +448,61 @@ export default function BatterySavingsCalculator() {
               ))}
             </ul>
           </div>
+
+          {warnings.length > 0 ? (
+            <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-wide text-amber-700">
+                    Assumption checks
+                  </p>
+
+                  <h3 className="mt-2 text-xl font-bold text-slate-950">
+                    Review these before trusting the result
+                  </h3>
+                </div>
+
+                <span className="inline-flex w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                  {warnings.length} check{warnings.length === 1 ? "" : "s"}
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {warnings.map((warning) => {
+                  const warningClasses = getWarningClasses(warning.tone);
+
+                  return (
+                    <div
+                      key={warning.id}
+                      className={`rounded-2xl p-4 ring-1 ${warningClasses.container}`}
+                    >
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                          <h4 className={`font-semibold ${warningClasses.text}`}>
+                            {warning.title}
+                          </h4>
+
+                          <p className="mt-2 text-sm leading-6 text-slate-700">
+                            {warning.message}
+                          </p>
+                        </div>
+
+                        <span
+                          className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${warningClasses.badge}`}
+                        >
+                          {warning.tone === "negative"
+                            ? "Important"
+                            : warning.tone === "warning"
+                              ? "Check"
+                              : "Note"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
 
           <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
