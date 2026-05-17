@@ -1,10 +1,14 @@
-import Link from "next/link";
 import { siteConfig } from "@/data/siteConfig";
+import Link from "next/link";
 
 const navLinks = [
   {
     label: "Calculator",
     href: "/#calculator",
+  },
+  {
+    label: "Guides",
+    href: "/guides",
   },
   {
     label: "How it works",

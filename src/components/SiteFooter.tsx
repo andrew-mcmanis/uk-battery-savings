@@ -7,6 +7,10 @@ const footerLinks = [
     href: "/about",
   },
   {
+    label: "Guides",
+    href: "/guides",
+  },
+  {
     label: "Is a battery worth it?",
     href: "/is-a-home-battery-worth-it-uk",
   },
