@@ -31,4 +31,10 @@ export const guides = [
       "Know what to ask before accepting a battery quote, including warranty, usable capacity and savings assumptions.",
     href: routePaths.batteryQuoteChecklist,
   },
+  {
+    title: "Home battery quote comparison",
+    description:
+      "Compare up to three battery quotes by installed cost, usable capacity, warranty, annual saving and payback.",
+    href: routePaths.batteryQuoteComparison,
+  },
 ];

@@ -13,6 +13,7 @@ export const routePaths = {
   batteryPaybackPeriod: "/home-battery-payback-period-uk",
   batterySavingsExamples: "/home-battery-savings-examples-uk",
   batteryQuoteChecklist: "/home-battery-quote-checklist-uk",
+  batteryQuoteComparison: "/home-battery-quote-comparison-uk",
 } as const;
 
 type ChangeFrequency =
@@ -93,6 +94,11 @@ export const publicRoutes: PublicRoute[] = [
   },
   {
     path: routePaths.batteryQuoteChecklist,
+    changeFrequency: "monthly",
+    priority: 0.75,
+  },
+  {
+    path: routePaths.batteryQuoteComparison,
     changeFrequency: "monthly",
     priority: 0.75,
   },

@@ -40,6 +40,10 @@ const footerLinks = [
     href: routePaths.batteryQuoteChecklist,
   },
   {
+    label: "Quote comparison",
+    href: routePaths.batteryQuoteComparison,
+  },
+  {
     label: "Privacy",
     href: routePaths.privacy,
   },

@@ -1,7 +1,7 @@
 import GuidePageLayout from "@/components/GuidePageLayout";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { sectionPaths } from "@/data/siteRoutes";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 
 export const metadata: Metadata = {
   title: "Home Battery Quote Checklist UK",
@@ -99,6 +99,17 @@ export default function HomeBatteryQuoteChecklistPage() {
             </Link>{" "}
             to create a rough savings estimate. Then compare each quote against
             that estimate.
+          </p>
+          <p className="mt-3">
+            Once you have more than one quote, use the{" "}
+            <Link
+              href={routePaths.batteryQuoteComparison}
+              className="font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              home battery quote comparison worksheet
+            </Link>{" "}
+            to compare installed cost, usable capacity, warranty and estimated payback
+            side by side.
           </p>
         </section>
       </div>
