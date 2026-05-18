@@ -11,6 +11,7 @@ import TrustSection from "@/components/TrustSection";
 import { faqSchema } from "@/data/landingPageContent";
 import type { Metadata } from "next";
 import StructuredData from "@/components/StructuredData";
+import ToolsSection from "@/components/ToolsSection";
 import {
   buildCalculatorWebApplicationSchema,
   buildWebSiteSchema,
@@ -56,6 +57,7 @@ export default function Home() {
       <HeroSection />
       <TrustSection />
       <BatterySavingsCalculator />
+      <ToolsSection />
       <HowItWorksSection />
       <FitSection />
       <GuidesSection />
