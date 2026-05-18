@@ -278,7 +278,7 @@ export default function QuoteComparisonWorksheet() {
               key={result.id}
               className="flex h-full flex-col rounded-3xl bg-slate-50 p-5 ring-1 ring-slate-200"
             >
-              <div className="flex min-h-[116px] flex-col gap-3">
+              <div className="flex min-h-29 flex-col gap-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Quote
