@@ -37,6 +37,16 @@ export default function NotFound() {
             >
               View guides
             </Link>
+
+            <Link
+              href={routePaths.tools}
+              className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200 hover:bg-white hover:shadow-sm"
+            >
+              <h3 className="font-bold text-slate-950">Tools</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Open the home battery savings calculator and quote comparison worksheet.
+              </p>
+            </Link>
           </div>
         </div>
       </section>
