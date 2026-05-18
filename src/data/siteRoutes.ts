@@ -2,6 +2,7 @@ export const routePaths = {
   home: "/",
   about: "/about",
   methodology: "/methodology",
+  tools: "/tools",
   guides: "/guides",
   feedback: "/feedback",
   privacy: "/privacy",
@@ -46,6 +47,11 @@ export const publicRoutes: PublicRoute[] = [
     path: routePaths.methodology,
     changeFrequency: "monthly",
     priority: 0.7,
+  },
+  {
+  path: routePaths.tools,
+  changeFrequency: "monthly",
+  priority: 0.8,
   },
   {
     path: routePaths.guides,

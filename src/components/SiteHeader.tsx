@@ -8,6 +8,10 @@ const navLinks = [
     href: sectionPaths.calculator,
   },
   {
+    label: "Tools",
+    href: routePaths.tools,
+  },
+  {
     label: "Guides",
     href: routePaths.guides,
   },
@@ -22,10 +26,6 @@ const navLinks = [
   {
     label: "Feedback",
     href: routePaths.feedback,
-  },
-  {
-    label: "Privacy",
-    href: routePaths.privacy,
   },
 ];
 

@@ -12,6 +12,10 @@ const footerLinks = [
     href: routePaths.methodology,
   },
   {
+    label: "Tools",
+    href: routePaths.tools,
+  },
+  {
     label: "Guides",
     href: routePaths.guides,
   },

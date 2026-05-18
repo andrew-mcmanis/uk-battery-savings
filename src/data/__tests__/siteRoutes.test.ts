@@ -40,6 +40,7 @@ describe("siteRoutes", () => {
 
     expect(publicRouteSet.has(routePaths.home)).toBe(true);
     expect(publicRouteSet.has(routePaths.methodology)).toBe(true);
+    expect(publicRouteSet.has(routePaths.tools)).toBe(true);
     expect(publicRouteSet.has(routePaths.guides)).toBe(true);
     expect(publicRouteSet.has(routePaths.feedback)).toBe(true);
     expect(publicRouteSet.has(routePaths.privacy)).toBe(true);
