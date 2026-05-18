@@ -638,10 +638,10 @@ export default function BatterySavingsCalculator() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr]">
+      <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
         <div
           id="calculator-inputs"
-          className="no-print scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+          className="no-print self-start scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
         >
           <h3 className="text-xl font-bold text-slate-950">
             Your assumptions
