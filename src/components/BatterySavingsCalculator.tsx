@@ -1,23 +1,23 @@
 "use client";
 
 import { batteryPresets } from "@/data/batteryPresets";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 import {
   calculateBatterySavings,
   type BatteryCalculatorInputs,
 } from "@/lib/batteryCalculator";
+import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
 import {
   encodeBatteryInputs,
   parseBatteryInputsFromSearchParams,
 } from "@/lib/batteryShareUrl";
+import { getBatteryVerdict } from "@/lib/batteryVerdict";
+import { getBatteryWarnings } from "@/lib/batteryWarnings";
 import {
   formatCurrency,
   formatCurrencyPrecise,
   formatYears,
 } from "@/lib/formatters";
-import { getBatteryVerdict } from "@/lib/batteryVerdict";
-import { getBatteryWarnings } from "@/lib/batteryWarnings";
-import { sanitizeBatteryInputs } from "@/lib/batteryInputLimits";
-import { routePaths, sectionPaths } from "@/data/siteRoutes";
 import { useEffect, useMemo, useState } from "react";
 
 type NumberInputProps = {
@@ -83,7 +83,7 @@ function ResultCard({ title, value, description }: ResultCardProps) {
       <p className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl">
         {value}
       </p>
-      <p className="mt-2 text-sm text-slate-600">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
     </div>
   );
 }
@@ -199,6 +199,8 @@ export default function BatterySavingsCalculator() {
     return getBatteryWarnings({ inputs, results });
   }, [inputs, results]);
 
+  const hasPositiveSaving = results.annualSaving > 0;
+
   function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
     setInputs(sanitizeBatteryInputs(presetInputs));
     setSelectedPresetId(presetId);
@@ -284,322 +286,315 @@ export default function BatterySavingsCalculator() {
     }
 
     const estimateHtml = `
-  <!doctype html>
-  <html lang="en-GB">
-  <head>
-    <meta charset="utf-8" />
-    <title>UK Home Battery Savings Estimate</title>
-    <style>
-      @page {
-        size: A4;
-        margin: 12mm;
-      }
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <title>UK Home Battery Savings Estimate</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #0f172a;
+      background: #ffffff;
+      font-size: 10.5pt;
+      line-height: 1.4;
+    }
+
+    .page {
+      width: 100%;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .brand {
+      font-size: 10pt;
+      font-weight: 700;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin: 5px 0 0;
+      font-size: 22pt;
+      line-height: 1.1;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 9pt;
+      color: #475569;
+      min-width: 180px;
+    }
+
+    .notice {
+      margin: 0 0 14px;
+      padding: 10px 12px;
+      border: 1px solid #f59e0b;
+      background: #fffbeb;
+      border-radius: 10px;
+      color: #78350f;
+      font-size: 9.5pt;
+    }
+
+    .section {
+      margin-top: 14px;
+      break-inside: avoid;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 13pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .result-grid,
+    .assumption-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 16px;
+    }
+
+    .card {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 10px;
+      background: #ffffff;
+      min-height: 58px;
+    }
+
+    .label {
+      display: block;
+      font-size: 8.5pt;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      display: block;
+      font-size: 13pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .value-small {
+      display: block;
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .verdict-box {
+      border: 1px solid #a7f3d0;
+      background: #ecfdf5;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .verdict-label {
+      display: inline-block;
+      border-radius: 999px;
+      background: #047857;
+      color: #ffffff;
+      padding: 4px 8px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .compact-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .compact-list li {
+      margin: 2px 0;
+    }
+
+    .footer {
+      margin-top: 16px;
+      border-top: 1px solid #cbd5e1;
+      padding-top: 8px;
+      font-size: 8.5pt;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    @media print {
       body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #0f172a;
-        background: #ffffff;
-        font-size: 10.5pt;
-        line-height: 1.4;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
       }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <div class="brand">homebatterysavings.co.uk</div>
+        <h1>UK Home Battery Savings Estimate</h1>
+      </div>
 
-      .page {
-        width: 100%;
-      }
+      <div class="meta">
+        <div>Generated: ${generatedDate}</div>
+        <div>Estimate only</div>
+      </div>
+    </header>
 
-      .header {
-        display: flex;
-        justify-content: space-between;
-        gap: 24px;
-        align-items: flex-start;
-        border-bottom: 2px solid #0f172a;
-        padding-bottom: 12px;
-        margin-bottom: 16px;
-      }
+    <p class="notice">
+      This estimate is a simplified guide only. Check real tariff rates, quote details, battery specification and warranty terms before buying.
+    </p>
 
-      .brand {
-        font-size: 10pt;
-        font-weight: 700;
-        color: #047857;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
+    <section class="section">
+      <h2 class="section-title">Estimated result</h2>
 
-      h1 {
-        margin: 5px 0 0;
-        font-size: 22pt;
-        line-height: 1.1;
-      }
-
-      .meta {
-        text-align: right;
-        font-size: 9pt;
-        color: #475569;
-        min-width: 180px;
-      }
-
-      .notice {
-        margin: 0 0 14px;
-        padding: 10px 12px;
-        border: 1px solid #f59e0b;
-        background: #fffbeb;
-        border-radius: 10px;
-        color: #78350f;
-        font-size: 9.5pt;
-      }
-
-      .section {
-        margin-top: 14px;
-        break-inside: avoid;
-      }
-
-      .section-title {
-        margin: 0 0 8px;
-        font-size: 13pt;
-        font-weight: 700;
-        color: #0f172a;
-      }
-
-      .result-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-      }
-
-      .assumption-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-      }
-
-      .detail-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px 16px;
-      }
-
-      .card {
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        padding: 9px 10px;
-        background: #ffffff;
-        min-height: 58px;
-      }
-
-      .label {
-        display: block;
-        font-size: 8.5pt;
-        color: #64748b;
-        margin-bottom: 4px;
-      }
-
-      .value {
-        display: block;
-        font-size: 13pt;
-        font-weight: 700;
-        color: #0f172a;
-      }
-
-      .value-small {
-        display: block;
-        font-size: 10.5pt;
-        font-weight: 700;
-        color: #0f172a;
-      }
-
-      .verdict-box {
-        border: 1px solid #a7f3d0;
-        background: #ecfdf5;
-        border-radius: 10px;
-        padding: 10px 12px;
-      }
-
-      .verdict-label {
-        display: inline-block;
-        border-radius: 999px;
-        background: #047857;
-        color: #ffffff;
-        padding: 4px 8px;
-        font-size: 8.5pt;
-        font-weight: 700;
-        margin-bottom: 6px;
-      }
-
-      .compact-list {
-        margin: 6px 0 0;
-        padding-left: 18px;
-      }
-
-      .compact-list li {
-        margin: 2px 0;
-      }
-
-      .footer {
-        margin-top: 16px;
-        border-top: 1px solid #cbd5e1;
-        padding-top: 8px;
-        font-size: 8.5pt;
-        color: #64748b;
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-      }
-
-      @media print {
-        body {
-          print-color-adjust: exact;
-          -webkit-print-color-adjust: exact;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page">
-      <header class="header">
-        <div>
-          <div class="brand">homebatterysavings.co.uk</div>
-          <h1>UK Home Battery Savings Estimate</h1>
+      <div class="result-grid">
+        <div class="card">
+          <span class="label">Annual saving</span>
+          <span class="value">${formatCurrency(results.annualSaving)}</span>
         </div>
 
-        <div class="meta">
-          <div>Generated: ${generatedDate}</div>
-          <div>Estimate only</div>
+        <div class="card">
+          <span class="label">Monthly saving</span>
+          <span class="value">${formatCurrency(results.monthlySaving)}</span>
         </div>
-      </header>
 
-      <p class="notice">
-        This estimate is a simplified guide only. Check real tariff rates, quote details, battery specification and warranty terms before buying.
-      </p>
-
-      <section class="section">
-        <h2 class="section-title">Estimated result</h2>
-
-        <div class="result-grid">
-          <div class="card">
-            <span class="label">Annual saving</span>
-            <span class="value">${formatCurrency(results.annualSaving)}</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Monthly saving</span>
-            <span class="value">${formatCurrency(results.monthlySaving)}</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Payback period</span>
-            <span class="value">${formatYears(results.paybackYears)}</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Verdict</span>
-            <span class="value-small">${verdict.label}</span>
-          </div>
+        <div class="card">
+          <span class="label">Payback period</span>
+          <span class="value">${formatYears(results.paybackYears)}</span>
         </div>
-      </section>
 
-      <section class="section">
-        <h2 class="section-title">Input assumptions</h2>
-
-        <div class="assumption-grid">
-          <div class="card">
-            <span class="label">Battery capacity</span>
-            <span class="value-small">${inputs.batteryCapacityKwh} kWh</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Useful peak usage</span>
-            <span class="value-small">${inputs.peakUsageCoveredKwh} kWh</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Installed cost</span>
-            <span class="value-small">${formatCurrency(inputs.installedCost)}</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Warranty period</span>
-            <span class="value-small">${inputs.warrantyYears} years</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Peak rate</span>
-            <span class="value-small">${inputs.peakRatePence}p/kWh</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Off-peak rate</span>
-            <span class="value-small">${inputs.offPeakRatePence}p/kWh</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Efficiency</span>
-            <span class="value-small">${inputs.efficiencyPercent}%</span>
-          </div>
-
-          <div class="card">
-            <span class="label">Cycles per year</span>
-            <span class="value-small">${inputs.cyclesPerYear}</span>
-          </div>
+        <div class="card">
+          <span class="label">Verdict</span>
+          <span class="value-small">${verdict.label}</span>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section">
-        <h2 class="section-title">Calculation detail</h2>
+    <section class="section">
+      <h2 class="section-title">Input assumptions</h2>
 
-        <div class="detail-grid">
-          <div>Useful battery energy per cycle: <strong>${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh</strong></div>
-          <div>Off-peak energy needed per cycle: <strong>${results.offPeakEnergyNeededPerCycle.toFixed(1)} kWh</strong></div>
-          <div>Peak cost avoided per cycle: <strong>${formatCurrencyPrecise(results.peakCostAvoidedPerCycle)}</strong></div>
-          <div>Off-peak charging cost per cycle: <strong>${formatCurrencyPrecise(results.offPeakChargingCostPerCycle)}</strong></div>
-          <div>Saving per cycle: <strong>${formatCurrencyPrecise(results.savingPerCycle)}</strong></div>
-          <div>Break-even battery cost: <strong>${formatCurrency(results.breakEvenBatteryCost)}</strong></div>
+      <div class="assumption-grid">
+        <div class="card">
+          <span class="label">Battery capacity</span>
+          <span class="value-small">${inputs.batteryCapacityKwh} kWh</span>
         </div>
-      </section>
 
-      <section class="section verdict-box">
-        <span class="verdict-label">${verdict.label}</span>
-        <div>${verdict.summary}</div>
-      </section>
+        <div class="card">
+          <span class="label">Useful peak usage</span>
+          <span class="value-small">${inputs.peakUsageCoveredKwh} kWh</span>
+        </div>
 
-      <section class="section">
-        <h2 class="section-title">Before accepting a quote, ask</h2>
+        <div class="card">
+          <span class="label">Installed cost</span>
+          <span class="value-small">${formatCurrency(inputs.installedCost)}</span>
+        </div>
 
-        <ul class="compact-list">
-          <li>What is the total installed cost including VAT?</li>
-          <li>What is the usable battery capacity, not just nominal capacity?</li>
-          <li>What warranty period and cycle limit apply?</li>
-          <li>What tariff assumptions are used in the savings estimate?</li>
-          <li>Does the system include backup power, or is that extra?</li>
-        </ul>
-      </section>
+        <div class="card">
+          <span class="label">Warranty period</span>
+          <span class="value-small">${inputs.warrantyYears} years</span>
+        </div>
 
-      <footer class="footer">
-        <span>Generated from homebatterysavings.co.uk</span>
-        <span>Use as an estimate only</span>
-      </footer>
-    </main>
+        <div class="card">
+          <span class="label">Peak rate</span>
+          <span class="value-small">${inputs.peakRatePence}p/kWh</span>
+        </div>
 
-    <script>
-      window.onload = function () {
-        window.focus();
-        window.print();
-      };
-    </script>
-  </body>
-  </html>
-  `;
+        <div class="card">
+          <span class="label">Off-peak rate</span>
+          <span class="value-small">${inputs.offPeakRatePence}p/kWh</span>
+        </div>
+
+        <div class="card">
+          <span class="label">Efficiency</span>
+          <span class="value-small">${inputs.efficiencyPercent}%</span>
+        </div>
+
+        <div class="card">
+          <span class="label">Cycles per year</span>
+          <span class="value-small">${inputs.cyclesPerYear}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Calculation detail</h2>
+
+      <div class="detail-grid">
+        <div>Useful battery energy per cycle: <strong>${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh</strong></div>
+        <div>Off-peak energy needed per cycle: <strong>${results.offPeakEnergyNeededPerCycle.toFixed(1)} kWh</strong></div>
+        <div>Peak cost avoided per cycle: <strong>${formatCurrencyPrecise(results.peakCostAvoidedPerCycle)}</strong></div>
+        <div>Off-peak charging cost per cycle: <strong>${formatCurrencyPrecise(results.offPeakChargingCostPerCycle)}</strong></div>
+        <div>Saving per cycle: <strong>${formatCurrencyPrecise(results.savingPerCycle)}</strong></div>
+        <div>Break-even battery cost: <strong>${formatCurrency(results.breakEvenBatteryCost)}</strong></div>
+      </div>
+    </section>
+
+    <section class="section verdict-box">
+      <span class="verdict-label">${verdict.label}</span>
+      <div>${verdict.summary}</div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Before accepting a quote, ask</h2>
+
+      <ul class="compact-list">
+        <li>What is the total installed cost including VAT?</li>
+        <li>What is the usable battery capacity, not just nominal capacity?</li>
+        <li>What warranty period and cycle limit apply?</li>
+        <li>What tariff assumptions are used in the savings estimate?</li>
+        <li>Does the system include backup power, or is that extra?</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <span>Generated from homebatterysavings.co.uk</span>
+      <span>Use as an estimate only</span>
+    </footer>
+  </main>
+
+  <script>
+    window.onload = function () {
+      window.focus();
+      window.print();
+    };
+  </script>
+</body>
+</html>
+`;
 
     printWindow.document.open();
     printWindow.document.write(estimateHtml);
     printWindow.document.close();
   }
-
-  const hasPositiveSaving = results.annualSaving > 0;
 
   return (
     <section
@@ -638,10 +633,10 @@ export default function BatterySavingsCalculator() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <div className="mt-10 grid items-stretch gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div
           id="calculator-inputs"
-          className="no-print self-start scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+          className="no-print h-fit self-start scroll-mt-24 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
         >
           <h3 className="text-xl font-bold text-slate-950">
             Your assumptions
@@ -790,7 +785,10 @@ export default function BatterySavingsCalculator() {
           </div>
         </div>
 
-        <div id="calculator-result" className="no-print scroll-mt-24 space-y-5">
+        <div
+          id="calculator-result"
+          className="no-print flex h-full scroll-mt-24 flex-col gap-5"
+        >
           <div className="rounded-3xl bg-slate-950 p-6 text-white shadow-sm">
             <p className="text-sm font-medium uppercase tracking-wide text-emerald-300">
               Estimated result
@@ -809,8 +807,8 @@ export default function BatterySavingsCalculator() {
             </p>
 
             <p className="mt-3 text-xs leading-5 text-slate-400">
-              Estimate only. Check real tariff rates, quote details and warranty terms
-              before buying.
+              Estimate only. Check real tariff rates, quote details and warranty
+              terms before buying.
             </p>
 
             <a
@@ -912,7 +910,7 @@ export default function BatterySavingsCalculator() {
             </div>
           ) : null}
 
-          <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+          <div className="flex flex-1 flex-col rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
@@ -967,19 +965,19 @@ export default function BatterySavingsCalculator() {
                   Print estimate
                 </button>
               </div>
-
-              <span className="sr-only" aria-live="polite">
-                {copyStatus === "copied"
-                  ? "Result copied to clipboard"
-                  : copyStatus === "failed"
-                    ? "Result copy failed"
-                    : shareLinkStatus === "copied"
-                      ? "Share link copied to clipboard"
-                      : shareLinkStatus === "failed"
-                        ? "Share link copy failed"
-                        : ""}
-              </span>
             </div>
+
+            <span className="sr-only" aria-live="polite">
+              {copyStatus === "copied"
+                ? "Result copied to clipboard"
+                : copyStatus === "failed"
+                  ? "Result copy failed"
+                  : shareLinkStatus === "copied"
+                    ? "Share link copied to clipboard"
+                    : shareLinkStatus === "failed"
+                      ? "Share link copy failed"
+                      : ""}
+            </span>
 
             <div className="mt-5 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
               <p className="font-semibold text-slate-950">
@@ -1005,45 +1003,64 @@ export default function BatterySavingsCalculator() {
               Read the full quote checklist →
             </a>
           </div>
+        </div>
+      </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            <ResultCard
-              title="Monthly saving"
-              value={formatCurrency(results.monthlySaving)}
-              description="Estimated average saving per month."
-            />
+      <div className="no-print mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+            Result details
+          </p>
 
-            <ResultCard
-              title="Payback period"
-              value={formatYears(results.paybackYears)}
-              description="Estimated time to recover the installed battery cost."
-            />
+          <h3 className="mt-3 text-2xl font-bold text-slate-950">
+            How the estimate breaks down
+          </h3>
 
-            <ResultCard
-              title="Saving per cycle"
-              value={formatCurrencyPrecise(results.savingPerCycle)}
-              description="Estimated saving each time the useful battery energy is charged and discharged."
-            />
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            These figures explain the estimated saving, payback period, useful
+            battery energy and break-even battery cost.
+          </p>
+        </div>
 
-            <ResultCard
-              title="Battery energy used"
-              value={`${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh`}
-              description="Battery energy assumed to be useful during expensive peak-rate hours."
-            />
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ResultCard
+            title="Monthly saving"
+            value={formatCurrency(results.monthlySaving)}
+            description="Estimated average saving per month."
+          />
 
-            <ResultCard
-              title="Unused capacity"
-              value={`${results.unusedBatteryCapacityPerCycle.toFixed(1)} kWh`}
-              description="Capacity not counted because your peak-period usage does not need it."
-            />
+          <ResultCard
+            title="Payback period"
+            value={formatYears(results.paybackYears)}
+            description="Estimated time to recover the installed battery cost."
+          />
 
-            <ResultCard
-              title="Break-even battery cost"
-              value={formatCurrency(results.breakEvenBatteryCost)}
-              description={`Maximum cost to break even over ${inputs.warrantyYears} years.`}
-            />
-          </div>
+          <ResultCard
+            title="Saving per cycle"
+            value={formatCurrencyPrecise(results.savingPerCycle)}
+            description="Estimated saving each time the useful battery energy is charged and discharged."
+          />
 
+          <ResultCard
+            title="Battery energy used"
+            value={`${results.usableBatteryEnergyPerCycle.toFixed(1)} kWh`}
+            description="Battery energy assumed to be useful during expensive peak-rate hours."
+          />
+
+          <ResultCard
+            title="Unused capacity"
+            value={`${results.unusedBatteryCapacityPerCycle.toFixed(1)} kWh`}
+            description="Capacity not counted because your peak-period usage does not need it."
+          />
+
+          <ResultCard
+            title="Break-even battery cost"
+            value={formatCurrency(results.breakEvenBatteryCost)}
+            description={`Maximum cost to break even over ${inputs.warrantyYears} years.`}
+          />
+        </div>
+
+        <div className="mt-6 space-y-4">
           <details className="group rounded-2xl bg-amber-50 p-5 text-sm leading-6 text-amber-950 ring-1 ring-amber-200">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
               <span>Important assumption</span>
