@@ -104,9 +104,16 @@ function ResultRow({ label, value }: ResultRowProps) {
   );
 }
 
+function formatNullableCurrency(value: number | null) {
+  return value === null ? "N/A" : formatCurrency(value);
+}
+
 export default function QuoteComparisonWorksheet() {
   const [quotes, setQuotes] = useState<QuoteComparisonInput[]>(defaultQuotes);
   const [selectedQuoteId, setSelectedQuoteId] = useState(defaultQuotes[0].id);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+  "idle"
+  );
 
   const results = useMemo(() => {
     return quotes.map((quote) => calculateQuoteComparison(quote));
@@ -144,6 +151,69 @@ export default function QuoteComparisonWorksheet() {
     setSelectedQuoteId(defaultQuotes[0].id);
   }
 
+  async function copyComparisonSummary() {
+  const quoteLines = results.flatMap((result) => [
+    `${result.quoteName || "Unnamed quote"}`,
+    `Installed cost: ${formatCurrency(result.installedCost)}`,
+    `Usable capacity: ${result.usableCapacityKwh} kWh`,
+    `Cost per usable kWh: ${formatNullableCurrency(result.costPerUsableKwh)}`,
+    `Estimated annual saving: ${formatCurrency(
+      result.estimatedAnnualSaving
+    )}`,
+    `Estimated payback: ${formatYears(result.paybackYears)}`,
+    `Warranty period: ${result.warrantyYears} years`,
+    `Backup power: ${
+      result.backupPowerIncluded ? "Included" : "Check quote"
+    }`,
+    result.notes ? `Notes: ${result.notes}` : null,
+    "",
+  ]);
+
+  const warningLines =
+    summary.warnings.length > 0
+      ? summary.warnings.flatMap((warning) => [
+          `${warning.quoteName}: ${warning.title}`,
+          warning.message,
+          "",
+        ])
+      : ["No comparison warnings."];
+
+  const comparisonSummary = [
+    "Home battery quote comparison",
+    "",
+    "Highlights",
+    `Lowest installed cost: ${
+      summary.cheapestInstalledCost?.quoteName ?? "N/A"
+    }`,
+    `Lowest cost per usable kWh: ${
+      summary.lowestCostPerUsableKwh?.quoteName ?? "N/A"
+    }`,
+    `Shortest estimated payback: ${summary.shortestPayback?.quoteName ?? "N/A"}`,
+    `Backup included: ${summary.backupIncludedCount} of ${results.length}`,
+    "",
+    "Quotes",
+    ...quoteLines.filter((line): line is string => line !== null),
+    "Checks",
+    ...warningLines,
+    "Generated from homebatterysavings.co.uk",
+  ].join("\n");
+
+  try {
+    await navigator.clipboard.writeText(comparisonSummary);
+    setCopyStatus("copied");
+
+    window.setTimeout(() => {
+      setCopyStatus("idle");
+    }, 2500);
+  } catch {
+    setCopyStatus("failed");
+
+    window.setTimeout(() => {
+      setCopyStatus("idle");
+    }, 2500);
+  }
+}
+
   return (
     <section className="space-y-8">
       <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
@@ -164,13 +234,36 @@ export default function QuoteComparisonWorksheet() {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={resetQuotes}
-            className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Reset examples
-          </button>
+          <div className="flex flex-col gap-2 sm:items-end">
+            <button
+              type="button"
+              onClick={copyComparisonSummary}
+              aria-label="Copy quote comparison summary"
+              className="inline-flex w-fit rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
+            >
+              {copyStatus === "copied"
+                ? "Copied"
+                : copyStatus === "failed"
+                  ? "Copy failed"
+                  : "Copy comparison"}
+            </button>
+
+            <button
+              type="button"
+              onClick={resetQuotes}
+              className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Reset examples
+            </button>
+
+            <span className="sr-only" aria-live="polite">
+              {copyStatus === "copied"
+                ? "Quote comparison copied to clipboard"
+                : copyStatus === "failed"
+                  ? "Quote comparison copy failed"
+                  : ""}
+            </span>
+          </div>
         </div>
       </div>
 
