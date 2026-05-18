@@ -3,6 +3,8 @@ import Link from "next/link";
 import GuidePageLayout from "@/components/GuidePageLayout";
 import QuoteComparisonWorksheet from "@/components/QuoteComparisonWorksheet";
 import { sectionPaths } from "@/data/siteRoutes";
+import StructuredData from "@/components/StructuredData";
+import { buildQuoteComparisonWebApplicationSchema } from "@/lib/structuredData";
 
 export const metadata: Metadata = {
   title: "Home Battery Quote Comparison UK",
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default function HomeBatteryQuoteComparisonPage() {
+  const quoteComparisonSchema = buildQuoteComparisonWebApplicationSchema();
+
   return (
     <GuidePageLayout
       eyebrow="Home battery tool"
@@ -21,6 +25,8 @@ export default function HomeBatteryQuoteComparisonPage() {
       description="Use this worksheet to compare home battery quotes side by side before deciding which installer or battery option deserves a closer look."
       currentPath="/home-battery-quote-comparison-uk"
     >
+      <StructuredData data={quoteComparisonSchema} />
+
       <div className="guide-content space-y-8">
         <p className="text-sm font-medium text-slate-500">
           Last updated: May 2026
@@ -38,6 +44,28 @@ export default function HomeBatteryQuoteComparisonPage() {
           <p>
             This worksheet helps you compare the core numbers in a consistent
             format.
+          </p>
+        </section>
+
+        <section>
+          <h2>When to use this worksheet</h2>
+
+          <p>
+            Use this worksheet after you have one or more home battery quotes and want
+            to compare them using the same core assumptions. It is especially useful
+            when quotes have different battery sizes, warranty periods, backup power
+            options or estimated savings.
+          </p>
+
+          <p>
+            If you do not yet have an annual saving estimate, start with the{" "}
+            <Link
+              href={sectionPaths.calculator}
+              className="font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              home battery savings calculator
+            </Link>{" "}
+            first, then bring the annual saving into this worksheet.
           </p>
         </section>
 

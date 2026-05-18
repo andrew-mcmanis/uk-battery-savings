@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import InfoPageLayout from "@/components/InfoPageLayout";
+import { routePaths, sectionPaths } from "@/data/siteRoutes";
 
 export const metadata: Metadata = {
   title: "Calculator Methodology",
@@ -212,12 +213,22 @@ export default function MethodologyPage() {
         <p className="mt-3">
           Use the{" "}
           <Link
-            href="/#calculator"
+            href={sectionPaths.calculator}
             className="font-semibold text-emerald-700 hover:text-emerald-800"
           >
             home battery savings calculator
           </Link>{" "}
           with your own quote, tariff rates and usage assumptions.
+        </p>
+        <p className="mt-3">
+          If you already have installer quotes, use the{" "}
+          <Link
+            href={routePaths.batteryQuoteComparison}
+            className="font-semibold text-emerald-700 hover:text-emerald-800"
+          >
+            home battery quote comparison worksheet
+          </Link>{" "}
+          to compare installed cost, usable capacity, warranty and estimated payback.
         </p>
       </div>
     </InfoPageLayout>

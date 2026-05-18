@@ -123,3 +123,29 @@ export function buildCalculatorWebApplicationSchema() {
     },
   };
 }
+
+export function buildQuoteComparisonWebApplicationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "UK Home Battery Quote Comparison Worksheet",
+    url: `${siteConfig.url}/home-battery-quote-comparison-uk`,
+    description:
+      "Compare UK home battery quotes by installed cost, usable capacity, warranty, estimated annual saving, payback period and backup power.",
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript",
+    inLanguage: "en-GB",
+    isAccessibleForFree: true,
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "GBP",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+  };
+}
