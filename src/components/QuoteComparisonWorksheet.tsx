@@ -6,6 +6,10 @@ import {
   getQuoteComparisonSummary,
   type QuoteComparisonInput,
 } from "@/lib/quoteComparison";
+import {
+  parseQuoteComparisonState,
+  serializeQuoteComparisonState,
+} from "@/lib/quoteComparisonStorage";
 import { formatCurrency, formatYears } from "@/lib/formatters";
 
 const defaultQuotes: QuoteComparisonInput[] = [
@@ -40,6 +44,9 @@ const defaultQuotes: QuoteComparisonInput[] = [
     notes: "",
   },
 ];
+
+const quoteComparisonStorageKey =
+  "homeBatterySavings.quoteComparisonWorksheet.v1";
 
 type NumberFieldProps = {
   label: string;
@@ -111,9 +118,14 @@ function formatNullableCurrency(value: number | null) {
 export default function QuoteComparisonWorksheet() {
   const [quotes, setQuotes] = useState<QuoteComparisonInput[]>(defaultQuotes);
   const [selectedQuoteId, setSelectedQuoteId] = useState(defaultQuotes[0].id);
+
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
-  "idle"
+    "idle"
   );
+
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "saved" | "loaded" | "cleared" | "failed"
+  >("idle");
 
   const results = useMemo(() => {
     return quotes.map((quote) => calculateQuoteComparison(quote));
@@ -151,68 +163,134 @@ export default function QuoteComparisonWorksheet() {
     setSelectedQuoteId(defaultQuotes[0].id);
   }
 
-  async function copyComparisonSummary() {
-  const quoteLines = results.flatMap((result) => [
-    `${result.quoteName || "Unnamed quote"}`,
-    `Installed cost: ${formatCurrency(result.installedCost)}`,
-    `Usable capacity: ${result.usableCapacityKwh} kWh`,
-    `Cost per usable kWh: ${formatNullableCurrency(result.costPerUsableKwh)}`,
-    `Estimated annual saving: ${formatCurrency(
-      result.estimatedAnnualSaving
-    )}`,
-    `Estimated payback: ${formatYears(result.paybackYears)}`,
-    `Warranty period: ${result.warrantyYears} years`,
-    `Backup power: ${
-      result.backupPowerIncluded ? "Included" : "Check quote"
-    }`,
-    result.notes ? `Notes: ${result.notes}` : null,
-    "",
-  ]);
-
-  const warningLines =
-    summary.warnings.length > 0
-      ? summary.warnings.flatMap((warning) => [
-          `${warning.quoteName}: ${warning.title}`,
-          warning.message,
-          "",
-        ])
-      : ["No comparison warnings."];
-
-  const comparisonSummary = [
-    "Home battery quote comparison",
-    "",
-    "Highlights",
-    `Lowest installed cost: ${
-      summary.cheapestInstalledCost?.quoteName ?? "N/A"
-    }`,
-    `Lowest cost per usable kWh: ${
-      summary.lowestCostPerUsableKwh?.quoteName ?? "N/A"
-    }`,
-    `Shortest estimated payback: ${summary.shortestPayback?.quoteName ?? "N/A"}`,
-    `Backup included: ${summary.backupIncludedCount} of ${results.length}`,
-    "",
-    "Quotes",
-    ...quoteLines.filter((line): line is string => line !== null),
-    "Checks",
-    ...warningLines,
-    "Generated from homebatterysavings.co.uk",
-  ].join("\n");
-
-  try {
-    await navigator.clipboard.writeText(comparisonSummary);
-    setCopyStatus("copied");
-
+  function clearSaveStatusLater() {
     window.setTimeout(() => {
-      setCopyStatus("idle");
-    }, 2500);
-  } catch {
-    setCopyStatus("failed");
-
-    window.setTimeout(() => {
-      setCopyStatus("idle");
+      setSaveStatus("idle");
     }, 2500);
   }
-}
+
+  async function copyComparisonSummary() {
+    const quoteLines = results.flatMap((result) => [
+      `${result.quoteName || "Unnamed quote"}`,
+      `Installed cost: ${formatCurrency(result.installedCost)}`,
+      `Usable capacity: ${result.usableCapacityKwh} kWh`,
+      `Cost per usable kWh: ${formatNullableCurrency(
+        result.costPerUsableKwh
+      )}`,
+      `Estimated annual saving: ${formatCurrency(
+        result.estimatedAnnualSaving
+      )}`,
+      `Estimated payback: ${formatYears(result.paybackYears)}`,
+      `Warranty period: ${result.warrantyYears} years`,
+      `Backup power: ${
+        result.backupPowerIncluded ? "Included" : "Check quote"
+      }`,
+      result.notes ? `Notes: ${result.notes}` : null,
+      "",
+    ]);
+
+    const warningLines =
+      summary.warnings.length > 0
+        ? summary.warnings.flatMap((warning) => [
+            `${warning.quoteName}: ${warning.title}`,
+            warning.message,
+            "",
+          ])
+        : ["No comparison warnings."];
+
+    const comparisonSummary = [
+      "Home battery quote comparison",
+      "",
+      "Highlights",
+      `Lowest installed cost: ${
+        summary.cheapestInstalledCost?.quoteName ?? "N/A"
+      }`,
+      `Lowest cost per usable kWh: ${
+        summary.lowestCostPerUsableKwh?.quoteName ?? "N/A"
+      }`,
+      `Shortest estimated payback: ${
+        summary.shortestPayback?.quoteName ?? "N/A"
+      }`,
+      `Backup included: ${summary.backupIncludedCount} of ${results.length}`,
+      "",
+      "Quotes",
+      ...quoteLines.filter((line): line is string => line !== null),
+      "Checks",
+      ...warningLines,
+      "Generated from homebatterysavings.co.uk",
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(comparisonSummary);
+      setCopyStatus("copied");
+
+      window.setTimeout(() => {
+        setCopyStatus("idle");
+      }, 2500);
+    } catch {
+      setCopyStatus("failed");
+
+      window.setTimeout(() => {
+        setCopyStatus("idle");
+      }, 2500);
+    }
+  }
+
+  function saveComparisonToBrowser() {
+    try {
+      const savedState = serializeQuoteComparisonState({
+        quotes,
+        selectedQuoteId,
+        savedAt: new Date().toISOString(),
+      });
+
+      window.localStorage.setItem(quoteComparisonStorageKey, savedState);
+      setSaveStatus("saved");
+      clearSaveStatusLater();
+    } catch {
+      setSaveStatus("failed");
+      clearSaveStatusLater();
+    }
+  }
+
+  function loadComparisonFromBrowser() {
+    try {
+      const savedState = window.localStorage.getItem(quoteComparisonStorageKey);
+
+      if (!savedState) {
+        setSaveStatus("failed");
+        clearSaveStatusLater();
+        return;
+      }
+
+      const parsedState = parseQuoteComparisonState(savedState);
+
+      if (!parsedState) {
+        setSaveStatus("failed");
+        clearSaveStatusLater();
+        return;
+      }
+
+      setQuotes(parsedState.quotes);
+      setSelectedQuoteId(parsedState.selectedQuoteId);
+      setSaveStatus("loaded");
+      clearSaveStatusLater();
+    } catch {
+      setSaveStatus("failed");
+      clearSaveStatusLater();
+    }
+  }
+
+  function clearSavedComparison() {
+    try {
+      window.localStorage.removeItem(quoteComparisonStorageKey);
+      setSaveStatus("cleared");
+      clearSaveStatusLater();
+    } catch {
+      setSaveStatus("failed");
+      clearSaveStatusLater();
+    }
+  }
 
   return (
     <section className="space-y-8">
@@ -234,34 +312,98 @@ export default function QuoteComparisonWorksheet() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-2 sm:items-end">
-            <button
-              type="button"
-              onClick={copyComparisonSummary}
-              aria-label="Copy quote comparison summary"
-              className="inline-flex w-fit rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800"
-            >
-              {copyStatus === "copied"
-                ? "Copied"
-                : copyStatus === "failed"
-                  ? "Copy failed"
-                  : "Copy comparison"}
-            </button>
+          <div className="w-full sm:w-72">
+            <div className="grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={copyComparisonSummary}
+                aria-label="Copy quote comparison summary"
+                className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800"
+              >
+                {copyStatus === "copied"
+                  ? "Copied"
+                  : copyStatus === "failed"
+                    ? "Copy failed"
+                    : "Copy"}
+              </button>
 
-            <button
-              type="button"
-              onClick={resetQuotes}
-              className="inline-flex w-fit rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-            >
-              Reset examples
-            </button>
+              <button
+                type="button"
+                onClick={resetQuotes}
+                className="inline-flex h-11 items-center justify-center rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Reset
+              </button>
+            </div>
+
+            <details className="group mt-2 rounded-xl bg-slate-50 text-sm ring-1 ring-slate-200">
+              <summary className="flex h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-4 font-semibold text-slate-950 hover:bg-slate-100 [&::-webkit-details-marker]:hidden">
+                <span>Browser save</span>
+                <span className="text-xs text-slate-500 group-open:hidden">Show</span>
+                <span className="hidden text-xs text-slate-500 group-open:inline">
+                  Hide
+                </span>
+              </summary>
+
+              <div className="border-t border-slate-200 p-3">
+                <p className="text-xs leading-5 text-slate-600">
+                  Optional. Saves this comparison only in this browser on this device.
+                </p>
+
+                <div className="mt-3 grid gap-2">
+                  <button
+                    type="button"
+                    onClick={saveComparisonToBrowser}
+                    className="h-10 rounded-lg bg-white px-3 text-left text-sm font-semibold text-slate-950 ring-1 ring-slate-200 hover:bg-slate-100"
+                  >
+                    Save in browser
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={loadComparisonFromBrowser}
+                    className="h-10 rounded-lg bg-white px-3 text-left text-sm font-semibold text-slate-950 ring-1 ring-slate-200 hover:bg-slate-100"
+                  >
+                    Load saved
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={clearSavedComparison}
+                    className="h-10 rounded-lg bg-white px-3 text-left text-sm font-semibold text-slate-950 ring-1 ring-slate-200 hover:bg-slate-100"
+                  >
+                    Clear saved
+                  </button>
+                </div>
+
+                {saveStatus !== "idle" ? (
+                  <p className="mt-2 text-xs font-medium text-slate-600">
+                    {saveStatus === "saved"
+                      ? "Saved in this browser."
+                      : saveStatus === "loaded"
+                        ? "Saved comparison loaded."
+                        : saveStatus === "cleared"
+                          ? "Saved comparison cleared."
+                          : "Could not use browser save."}
+                  </p>
+                ) : null}
+              </div>
+            </details>
 
             <span className="sr-only" aria-live="polite">
               {copyStatus === "copied"
                 ? "Quote comparison copied to clipboard"
                 : copyStatus === "failed"
                   ? "Quote comparison copy failed"
-                  : ""}
+                  : saveStatus === "saved"
+                    ? "Quote comparison saved in this browser"
+                    : saveStatus === "loaded"
+                      ? "Saved quote comparison loaded"
+                      : saveStatus === "cleared"
+                        ? "Saved quote comparison cleared"
+                        : saveStatus === "failed"
+                          ? "Browser save action failed"
+                          : ""}
             </span>
           </div>
         </div>
@@ -450,8 +592,8 @@ export default function QuoteComparisonWorksheet() {
             </p>
 
             <p className="mt-2 text-sm leading-6 text-emerald-900">
-              Check whether backup power is included in the quote price or listed as an
-              optional extra.
+              Check whether backup power is included in the quote price or
+              listed as an optional extra.
             </p>
           </div>
 

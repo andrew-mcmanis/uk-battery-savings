@@ -52,6 +52,21 @@ export default function PrivacyPage() {
       </div>
 
       <div>
+        <h2 className="text-2xl font-bold text-slate-950">
+          Browser-saved quote comparisons
+        </h2>
+        <p className="mt-3">
+          If you choose to use the quote comparison browser save option, the quote
+          comparison details are stored only in your own browser on your own device.
+        </p>
+        <p className="mt-3">
+          The website does not send those saved quote comparison details to a server
+          or store them in a database. You can clear the saved comparison from the
+          quote comparison page or by clearing your browser data.
+        </p>
+      </div>
+
+      <div>
         <h2 className="text-2xl font-bold text-slate-950">Feedback emails</h2>
         <p className="mt-3">
           If you choose to send feedback by email, the information you include in that
