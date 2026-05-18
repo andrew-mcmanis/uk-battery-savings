@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import {
   calculateQuoteComparison,
+  getQuoteComparisonSummary,
   type QuoteComparisonInput,
 } from "@/lib/quoteComparison";
 import { formatCurrency, formatYears } from "@/lib/formatters";
@@ -46,6 +47,7 @@ type NumberFieldProps = {
   min?: number;
   step?: number;
   suffix?: string;
+  helpText?: string;
   onChange: (value: number) => void;
 };
 
@@ -55,6 +57,7 @@ function NumberField({
   min = 0,
   step = 1,
   suffix,
+  helpText,
   onChange,
 }: NumberFieldProps) {
   return (
@@ -77,30 +80,47 @@ function NumberField({
           </span>
         ) : null}
       </div>
+
+      {helpText ? (
+        <p className="mt-1 text-xs leading-5 text-slate-500">{helpText}</p>
+      ) : null}
     </label>
   );
 }
 
-type ResultMetricProps = {
+type ResultRowProps = {
   label: string;
   value: string;
 };
 
-function ResultMetric({ label, value }: ResultMetricProps) {
+function ResultRow({ label, value }: ResultRowProps) {
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
-      <p className="text-sm text-slate-500">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-slate-950">{value}</p>
+    <div className="flex items-center justify-between gap-4 border-b border-slate-200 py-3 last:border-b-0">
+      <dt className="text-sm text-slate-500">{label}</dt>
+      <dd className="text-right text-sm font-semibold text-slate-950">
+        {value}
+      </dd>
     </div>
   );
 }
 
 export default function QuoteComparisonWorksheet() {
   const [quotes, setQuotes] = useState<QuoteComparisonInput[]>(defaultQuotes);
+  const [selectedQuoteId, setSelectedQuoteId] = useState(defaultQuotes[0].id);
 
   const results = useMemo(() => {
     return quotes.map((quote) => calculateQuoteComparison(quote));
   }, [quotes]);
+
+  const summary = useMemo(() => {
+    return getQuoteComparisonSummary(results);
+  }, [results]);
+
+  const selectedQuote =
+    quotes.find((quote) => quote.id === selectedQuoteId) ?? quotes[0];
+
+  const selectedResult =
+    results.find((result) => result.id === selectedQuote.id) ?? results[0];
 
   function updateQuote<Key extends keyof QuoteComparisonInput>(
     quoteId: string,
@@ -121,6 +141,7 @@ export default function QuoteComparisonWorksheet() {
 
   function resetQuotes() {
     setQuotes(defaultQuotes);
+    setSelectedQuoteId(defaultQuotes[0].id);
   }
 
   return (
@@ -133,13 +154,13 @@ export default function QuoteComparisonWorksheet() {
             </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">
-              Compare up to 3 home battery quotes
+              Compare home battery quotes
             </h2>
 
             <p className="mt-4 max-w-3xl leading-7 text-slate-600">
-              Enter the main numbers from each quote. The worksheet compares
-              cost per usable kWh and estimated payback period so you can spot
-              whether a cheaper-looking quote is actually better value.
+              Choose a quote, enter the main numbers, then use the comparison
+              summary to spot differences in installed cost, usable capacity,
+              payback and backup power.
             </p>
           </div>
 
@@ -153,144 +174,38 @@ export default function QuoteComparisonWorksheet() {
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        {quotes.map((quote) => (
-          <div
-            key={quote.id}
-            className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-          >
-            <label className="block">
-              <span className="text-sm font-medium text-slate-800">
-                Quote name
-              </span>
-
-              <input
-                type="text"
-                value={quote.quoteName}
-                onChange={(event) =>
-                  updateQuote(quote.id, "quoteName", event.target.value)
-                }
-                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 shadow-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-              />
-            </label>
-
-            <div className="mt-5 grid gap-5">
-              <NumberField
-                label="Installed cost"
-                value={quote.installedCost}
-                min={0}
-                step={100}
-                suffix="£"
-                onChange={(value) =>
-                  updateQuote(quote.id, "installedCost", value)
-                }
-              />
-
-              <NumberField
-                label="Usable battery capacity"
-                value={quote.usableCapacityKwh}
-                min={0}
-                step={0.5}
-                suffix="kWh"
-                onChange={(value) =>
-                  updateQuote(quote.id, "usableCapacityKwh", value)
-                }
-              />
-
-              <NumberField
-                label="Warranty period"
-                value={quote.warrantyYears}
-                min={1}
-                step={1}
-                suffix="years"
-                onChange={(value) =>
-                  updateQuote(quote.id, "warrantyYears", value)
-                }
-              />
-
-              <NumberField
-                label="Estimated annual saving"
-                value={quote.estimatedAnnualSaving}
-                min={0}
-                step={10}
-                suffix="£"
-                onChange={(value) =>
-                  updateQuote(quote.id, "estimatedAnnualSaving", value)
-                }
-              />
-
-              <label className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
-                <input
-                  type="checkbox"
-                  checked={quote.backupPowerIncluded}
-                  onChange={(event) =>
-                    updateQuote(
-                      quote.id,
-                      "backupPowerIncluded",
-                      event.target.checked
-                    )
-                  }
-                  className="h-4 w-4 rounded border-slate-300 text-emerald-700"
-                />
-
-                <span className="text-sm font-medium text-slate-800">
-                  Backup power included
-                </span>
-              </label>
-
-              <label className="block">
-                <span className="text-sm font-medium text-slate-800">
-                  Notes
-                </span>
-
-                <textarea
-                  value={quote.notes}
-                  onChange={(event) =>
-                    updateQuote(quote.id, "notes", event.target.value)
-                  }
-                  rows={3}
-                  className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 shadow-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                  placeholder="Installer name, battery model, exclusions, backup details..."
-                />
-              </label>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
-          Comparison results
+      <div className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-5">
+        <p className="px-1 text-sm font-semibold text-slate-950">
+          Select a quote to edit
         </p>
 
-        <h2 className="mt-3 text-2xl font-bold text-slate-950">
-          Side-by-side quote summary
-        </h2>
+        <div className="mt-3 grid gap-3 md:grid-cols-3">
+          {results.map((result) => {
+            const isSelected = result.id === selectedQuoteId;
 
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-          Compare each quote by installed cost, usable capacity, cost per usable
-          kWh, estimated annual saving and payback period.
-        </p>
+            return (
+              <button
+                key={result.id}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => setSelectedQuoteId(result.id)}
+                className={`rounded-2xl border p-4 text-left transition ${
+                  isSelected
+                    ? "border-emerald-600 bg-emerald-50"
+                    : "border-slate-200 bg-white hover:border-emerald-300"
+                }`}
+              >
+                <span className="block text-sm font-bold text-slate-950">
+                  {result.quoteName || "Unnamed quote"}
+                </span>
 
-        <div className="mt-6 grid items-stretch gap-5 lg:grid-cols-3">
-          {results.map((result) => (
-            <div
-              key={result.id}
-              className="flex h-full flex-col rounded-3xl bg-slate-50 p-5 ring-1 ring-slate-200"
-            >
-              <div className="flex min-h-29 flex-col gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    Quote
-                  </p>
-
-                  <h3 className="mt-1 text-2xl font-bold leading-tight text-slate-950">
-                    {result.quoteName || "Unnamed quote"}
-                  </h3>
-                </div>
+                <span className="mt-2 block text-sm text-slate-600">
+                  {formatCurrency(result.installedCost)} ·{" "}
+                  {formatYears(result.paybackYears)}
+                </span>
 
                 <span
-                  className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${
+                  className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                     result.backupPowerIncluded
                       ? "bg-emerald-100 text-emerald-800"
                       : "bg-amber-100 text-amber-800"
@@ -300,55 +215,271 @@ export default function QuoteComparisonWorksheet() {
                     ? "Backup included"
                     : "Check backup"}
                 </span>
-              </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-              <div className="mt-4 grid gap-3">
-                <ResultMetric
-                  label="Installed cost"
-                  value={formatCurrency(result.installedCost)}
-                />
+      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+        <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+            Editing
+          </p>
 
-                <ResultMetric
-                  label="Usable capacity"
-                  value={`${result.usableCapacityKwh} kWh`}
-                />
+          <h3 className="mt-3 text-2xl font-bold text-slate-950">
+            {selectedQuote.quoteName || "Unnamed quote"}
+          </h3>
 
-                <ResultMetric
-                  label="Cost per usable kWh"
-                  value={
-                    result.costPerUsableKwh === null
-                      ? "N/A"
-                      : formatCurrency(result.costPerUsableKwh)
-                  }
-                />
+          <div className="mt-6 grid gap-5">
+            <label className="block">
+              <span className="text-sm font-medium text-slate-800">
+                Quote name
+              </span>
 
-                <ResultMetric
-                  label="Estimated annual saving"
-                  value={formatCurrency(result.estimatedAnnualSaving)}
-                />
+              <input
+                type="text"
+                value={selectedQuote.quoteName}
+                onChange={(event) =>
+                  updateQuote(
+                    selectedQuote.id,
+                    "quoteName",
+                    event.target.value
+                  )
+                }
+                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 shadow-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              />
+            </label>
 
-                <ResultMetric
-                  label="Estimated payback"
-                  value={formatYears(result.paybackYears)}
-                />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <NumberField
+                label="Installed cost"
+                value={selectedQuote.installedCost}
+                min={0}
+                step={100}
+                suffix="£"
+                onChange={(value) =>
+                  updateQuote(selectedQuote.id, "installedCost", value)
+                }
+              />
 
-                <ResultMetric
-                  label="Warranty period"
-                  value={`${result.warrantyYears} years`}
-                />
-              </div>
+              <NumberField
+                label="Usable battery capacity"
+                value={selectedQuote.usableCapacityKwh}
+                min={0}
+                step={0.5}
+                suffix="kWh"
+                onChange={(value) =>
+                  updateQuote(selectedQuote.id, "usableCapacityKwh", value)
+                }
+              />
+            </div>
 
-              {result.notes ? (
-                <div className="mt-5 rounded-xl bg-white p-4 ring-1 ring-slate-200">
-                  <p className="text-sm font-semibold text-slate-950">Notes</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {result.notes}
+            <div className="grid gap-5 sm:grid-cols-2">
+              <NumberField
+                label="Warranty period"
+                value={selectedQuote.warrantyYears}
+                min={1}
+                step={1}
+                suffix="years"
+                onChange={(value) =>
+                  updateQuote(selectedQuote.id, "warrantyYears", value)
+                }
+              />
+
+              <NumberField
+                label="Estimated annual saving"
+                value={selectedQuote.estimatedAnnualSaving}
+                min={0}
+                step={10}
+                suffix="£"
+                helpText="Use the annual saving from the calculator or the installer estimate."
+                onChange={(value) =>
+                  updateQuote(selectedQuote.id, "estimatedAnnualSaving", value)
+                }
+              />
+            </div>
+
+            <label className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+              <input
+                type="checkbox"
+                checked={selectedQuote.backupPowerIncluded}
+                onChange={(event) =>
+                  updateQuote(
+                    selectedQuote.id,
+                    "backupPowerIncluded",
+                    event.target.checked
+                  )
+                }
+                className="h-4 w-4 rounded border-slate-300 text-emerald-700"
+              />
+
+              <span className="text-sm font-medium text-slate-800">
+                Backup power included
+              </span>
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-slate-800">Notes</span>
+
+              <textarea
+                value={selectedQuote.notes}
+                onChange={(event) =>
+                  updateQuote(selectedQuote.id, "notes", event.target.value)
+                }
+                rows={4}
+                className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 shadow-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+                placeholder="Installer name, battery model, exclusions, backup details..."
+              />
+            </label>
+          </div>
+        </div>
+
+        <aside className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+            Live result
+          </p>
+
+          <h3 className="mt-3 text-3xl font-bold text-slate-950">
+            {formatCurrency(selectedResult.installedCost)}
+          </h3>
+
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            {selectedResult.usableCapacityKwh} kWh usable capacity ·{" "}
+            {formatYears(selectedResult.paybackYears)} estimated payback
+          </p>
+
+          <div className="mt-5 rounded-2xl bg-emerald-50 p-4 ring-1 ring-emerald-100">
+            <p className="text-sm font-semibold text-emerald-950">
+              {selectedResult.backupPowerIncluded
+                ? "Backup power included"
+                : "Backup power needs checking"}
+            </p>
+
+            <p className="mt-2 text-sm leading-6 text-emerald-900">
+              Check whether backup power is included in the quote price or listed as an
+              optional extra.
+            </p>
+          </div>
+
+          <dl className="mt-6 rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200">
+            <ResultRow
+              label="Cost per usable kWh"
+              value={
+                selectedResult.costPerUsableKwh === null
+                  ? "N/A"
+                  : formatCurrency(selectedResult.costPerUsableKwh)
+              }
+            />
+
+            <ResultRow
+              label="Annual saving"
+              value={formatCurrency(selectedResult.estimatedAnnualSaving)}
+            />
+
+            <ResultRow
+              label="Warranty"
+              value={`${selectedResult.warrantyYears} years`}
+            />
+
+            <ResultRow
+              label="Backup power"
+              value={
+                selectedResult.backupPowerIncluded ? "Included" : "Check quote"
+              }
+            />
+          </dl>
+        </aside>
+      </div>
+
+      <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
+          Comparison summary
+        </p>
+
+        <h2 className="mt-3 text-2xl font-bold text-slate-950">
+          Which quote stands out?
+        </h2>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-sm text-slate-500">Lowest installed cost</p>
+            <p className="mt-2 text-xl font-bold text-slate-950">
+              {summary.cheapestInstalledCost?.quoteName ?? "N/A"}
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              {summary.cheapestInstalledCost
+                ? `${formatCurrency(
+                    summary.cheapestInstalledCost.installedCost
+                  )} installed cost.`
+                : "No installed cost available."}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-sm text-slate-500">Lowest cost per usable kWh</p>
+            <p className="mt-2 text-xl font-bold text-slate-950">
+              {summary.lowestCostPerUsableKwh?.quoteName ?? "N/A"}
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              {summary.lowestCostPerUsableKwh?.costPerUsableKwh !== null &&
+              summary.lowestCostPerUsableKwh?.costPerUsableKwh !== undefined
+                ? `${formatCurrency(
+                    summary.lowestCostPerUsableKwh.costPerUsableKwh
+                  )} per usable kWh.`
+                : "No usable capacity available."}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-sm text-slate-500">Shortest estimated payback</p>
+            <p className="mt-2 text-xl font-bold text-slate-950">
+              {summary.shortestPayback?.quoteName ?? "N/A"}
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              {summary.shortestPayback
+                ? `${formatYears(
+                    summary.shortestPayback.paybackYears
+                  )} estimated payback.`
+                : "No positive annual saving available."}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <p className="text-sm text-slate-500">Backup included</p>
+            <p className="mt-2 text-xl font-bold text-slate-950">
+              {summary.backupIncludedCount} of {results.length}
+            </p>
+            <p className="mt-2 text-sm text-slate-600">
+              Quotes marked as including backup power.
+            </p>
+          </div>
+        </div>
+
+        {summary.warnings.length > 0 ? (
+          <details className="mt-6 rounded-2xl bg-amber-50 p-5 ring-1 ring-amber-200">
+            <summary className="cursor-pointer font-semibold text-amber-950">
+              Checks before comparing quotes
+            </summary>
+
+            <div className="mt-3 space-y-3">
+              {summary.warnings.map((warning) => (
+                <div
+                  key={`${warning.quoteId}-${warning.title}`}
+                  className="rounded-xl bg-white p-4 ring-1 ring-amber-100"
+                >
+                  <p className="text-sm font-semibold text-slate-950">
+                    {warning.quoteName}: {warning.title}
+                  </p>
+
+                  <p className="mt-1 text-sm leading-6 text-slate-700">
+                    {warning.message}
                   </p>
                 </div>
-              ) : null}
+              ))}
             </div>
-          ))}
-        </div>
+          </details>
+        ) : null}
 
         <div className="mt-6 rounded-2xl bg-emerald-50 p-5 ring-1 ring-emerald-100">
           <p className="font-semibold text-slate-950">
