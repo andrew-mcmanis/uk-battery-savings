@@ -5,6 +5,7 @@ import FitSection from "@/components/FitSection";
 import GuidesSection from "@/components/GuidesSection";
 import HeroSection from "@/components/HeroSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
+import QuoteLeadCta from "@/components/QuoteLeadCta";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import TrustSection from "@/components/TrustSection";
@@ -18,9 +19,9 @@ import {
 } from "@/lib/structuredData";
 
 export const metadata: Metadata = {
-  title: "UK Home Battery Savings Calculator and Payback Estimator",
+  title: "UK Home Battery Savings Calculator, Payback and Quote Comparison",
   description:
-    "Estimate UK home battery savings, monthly savings, payback period and break-even cost using your battery size, tariff rates and expected usage.",
+    "Estimate UK home battery savings, payback period and break-even cost, then prepare to compare installer quotes using your battery size, tariff rates and expected usage.",
   keywords: [
     "home battery savings calculator UK",
     "battery payback calculator UK",
@@ -32,9 +33,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "UK Home Battery Savings Calculator and Payback Estimator",
+    title: "UK Home Battery Savings Calculator, Payback and Quote Comparison",
     description:
-      "Estimate home battery savings, payback period and break-even cost using UK electricity tariff assumptions.",
+      "Estimate home battery savings, payback period and break-even cost, then prepare to compare UK installer quotes.",
     type: "website",
     locale: "en_GB",
     url: "/",
@@ -57,6 +58,7 @@ export default function Home() {
       <HeroSection />
       <TrustSection />
       <BatterySavingsCalculator />
+      <QuoteLeadCta />
       <ToolsSection />
       <HowItWorksSection />
       <FitSection />

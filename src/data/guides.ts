@@ -37,4 +37,10 @@ export const guides = [
       "Compare up to three battery quotes by installed cost, usable capacity, warranty, annual saving and payback.",
     href: routePaths.batteryQuoteComparison,
   },
+  {
+    title: "Compare home battery installer quotes",
+    description:
+      "Use a buyer-ready workflow to prepare your numbers, request better quotes and compare installer offers clearly.",
+    href: routePaths.batteryInstallerQuotes,
+  },
 ];

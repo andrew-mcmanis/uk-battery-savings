@@ -22,7 +22,7 @@ export default function ToolsSection() {
         </p>
       </div>
 
-      <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2">
+      <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => (
           <ToolCard
             key={tool.href}

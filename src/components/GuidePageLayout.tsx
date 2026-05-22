@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import QuoteLeadCta from "@/components/QuoteLeadCta";
 import RelatedGuides from "@/components/RelatedGuides";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -98,6 +99,15 @@ export default function GuidePageLayout({
           >
             Use the home battery savings calculator
           </Link>
+        </div>
+
+        <div className="mt-10">
+          <QuoteLeadCta
+            eyebrow="Ready to compare quotes?"
+            title="Use this guide to ask better installer questions"
+            description="Once you know the numbers that matter, compare any installer quote against your estimated savings, usable capacity and warranty terms."
+            compact
+          />
         </div>
 
         <RelatedGuides currentPath={currentPath} />

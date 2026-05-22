@@ -45,6 +45,7 @@ describe("siteRoutes", () => {
     expect(publicRouteSet.has(routePaths.feedback)).toBe(true);
     expect(publicRouteSet.has(routePaths.privacy)).toBe(true);
     expect(publicRouteSet.has(routePaths.disclaimer)).toBe(true);
+    expect(publicRouteSet.has(routePaths.commercialDisclosure)).toBe(true);
     expect(publicRouteSet.has(routePaths.terms)).toBe(true);
   });
 

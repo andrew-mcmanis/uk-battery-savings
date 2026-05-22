@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import QuoteLeadCta from "@/components/QuoteLeadCta";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import StructuredData from "@/components/StructuredData";
@@ -63,7 +64,7 @@ export default function ToolsPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-        <div className="grid items-stretch gap-5 md:grid-cols-2">
+        <div className="grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool) => (
             <ToolCard
               key={tool.href}
@@ -87,6 +88,12 @@ export default function ToolsPage() {
           </p>
         </div>
       </section>
+
+      <QuoteLeadCta
+        eyebrow="Commercial next step"
+        title="Move from estimate to quote comparison"
+        description="The highest-value visitor is already comparing installers. Use these tools to prepare the numbers, then move into quote comparison with a clearer brief."
+      />
 
       <SiteFooter />
     </main>

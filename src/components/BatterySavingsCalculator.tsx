@@ -1090,6 +1090,13 @@ export default function BatterySavingsCalculator() {
             >
               Read the full quote checklist →
             </a>
+
+            <a
+              href={routePaths.batteryInstallerQuotes}
+              className="mt-3 inline-flex text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+            >
+              Prepare to compare installer quotes →
+            </a>
           </div>
         </div>
       </div>

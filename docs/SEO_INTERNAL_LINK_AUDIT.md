@@ -13,7 +13,9 @@ Verified against the local Next.js site at `http://localhost:3000`. Live search-
 - [x] /feedback loads
 - [x] /privacy loads
 - [x] /disclaimer loads
+- [x] /commercial-disclosure loads
 - [x] /terms loads
+- [x] /home-battery-installer-quotes-uk loads
 - [x] /sitemap.xml loads
 - [x] /robots.txt loads
 
@@ -39,6 +41,7 @@ Note: print estimate was not marked complete because it opens a browser print di
 - [x] /home-battery-savings-examples-uk loads
 - [x] /home-battery-quote-checklist-uk loads
 - [x] /home-battery-quote-comparison-uk loads
+- [x] /home-battery-installer-quotes-uk loads
 
 ## Metadata check
 
@@ -58,8 +61,10 @@ For each public page:
 - [x] Homepage links to calculator
 - [x] Homepage links to tools
 - [x] Homepage links to guides
+- [x] Homepage links to installer quote comparison
 - [x] Tools page links to calculator
 - [x] Tools page links to quote comparison
+- [x] Tools page links to installer quote preparation
 - [x] Guides hub links to all guide pages
 - [x] Guide pages link back to /guides through breadcrumbs
 - [x] Guide pages show related guides
@@ -67,6 +72,7 @@ For each public page:
 - [x] Methodology links to quote comparison
 - [x] Quote checklist links to quote comparison
 - [x] Quote checklist links to tools
+- [x] Commercial quote page links to calculator, quote checklist and quote worksheet
 - [x] Footer links to all important public pages
 
 ## Trust and clarity check
@@ -77,6 +83,7 @@ For each public page:
 - [x] Privacy page mentions feedback email
 - [x] Privacy page mentions browser-saved quote comparisons
 - [x] Disclaimer page exists
+- [x] Commercial disclosure page exists
 - [x] Feedback page email link works
 - [x] Last updated appears on guide-style pages
 

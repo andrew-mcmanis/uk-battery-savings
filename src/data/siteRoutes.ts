@@ -7,6 +7,7 @@ export const routePaths = {
   feedback: "/feedback",
   privacy: "/privacy",
   disclaimer: "/disclaimer",
+  commercialDisclosure: "/commercial-disclosure",
   terms: "/terms",
 
   isBatteryWorthIt: "/is-a-home-battery-worth-it-uk",
@@ -15,6 +16,7 @@ export const routePaths = {
   batterySavingsExamples: "/home-battery-savings-examples-uk",
   batteryQuoteChecklist: "/home-battery-quote-checklist-uk",
   batteryQuoteComparison: "/home-battery-quote-comparison-uk",
+  batteryInstallerQuotes: "/home-battery-installer-quotes-uk",
 } as const;
 
 type ChangeFrequency =
@@ -74,6 +76,11 @@ export const publicRoutes: PublicRoute[] = [
     priority: 0.4,
   },
   {
+    path: routePaths.commercialDisclosure,
+    changeFrequency: "monthly",
+    priority: 0.4,
+  },
+  {
     path: routePaths.terms,
     changeFrequency: "monthly",
     priority: 0.4,
@@ -106,7 +113,12 @@ export const publicRoutes: PublicRoute[] = [
   {
     path: routePaths.batteryQuoteComparison,
     changeFrequency: "monthly",
-    priority: 0.75,
+    priority: 0.8,
+  },
+  {
+    path: routePaths.batteryInstallerQuotes,
+    changeFrequency: "weekly",
+    priority: 0.9,
   },
 ];
 

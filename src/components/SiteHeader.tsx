@@ -12,6 +12,10 @@ const navLinks = [
     href: routePaths.tools,
   },
   {
+    label: "Quotes",
+    href: routePaths.batteryInstallerQuotes,
+  },
+  {
     label: "Guides",
     href: routePaths.guides,
   },
@@ -29,7 +33,7 @@ const navLinks = [
   },
 ];
 
-const mobileNavLinks = navLinks.slice(0, 3);
+const mobileNavLinks = navLinks.slice(0, 4);
 
 export default function SiteHeader() {
   return (
@@ -64,10 +68,10 @@ export default function SiteHeader() {
           </nav>
 
           <Link
-            href={sectionPaths.calculator}
+            href={routePaths.batteryInstallerQuotes}
             className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
           >
-            Start
+            Quotes
           </Link>
         </div>
 

@@ -48,12 +48,20 @@ const footerLinks = [
     href: routePaths.batteryQuoteComparison,
   },
   {
+    label: "Installer quotes",
+    href: routePaths.batteryInstallerQuotes,
+  },
+  {
     label: "Privacy",
     href: routePaths.privacy,
   },
   {
     label: "Disclaimer",
     href: routePaths.disclaimer,
+  },
+  {
+    label: "Commercial disclosure",
+    href: routePaths.commercialDisclosure,
   },
   {
     label: "Terms",

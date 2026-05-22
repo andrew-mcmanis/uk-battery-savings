@@ -10,6 +10,8 @@ Local pre-launch verification completed 2026-05-22:
 - [x] Local sitemap.xml includes /guides
 - [x] Local sitemap.xml includes /methodology
 - [x] Local sitemap.xml includes /home-battery-quote-comparison-uk
+- [x] Local sitemap.xml includes /home-battery-installer-quotes-uk
+- [x] Local sitemap.xml includes /commercial-disclosure
 
 Live domain checks below are intentionally left open until `https://homebatterysavings.co.uk` is reachable and dashboard access is available.
 
@@ -23,6 +25,7 @@ Live domain checks below are intentionally left open until `https://homebatterys
 - [ ] sitemap.xml includes /guides
 - [ ] sitemap.xml includes /methodology
 - [ ] sitemap.xml includes /home-battery-quote-comparison-uk
+- [ ] sitemap.xml includes /home-battery-installer-quotes-uk
 
 ## Google Search Console
 
@@ -34,6 +37,7 @@ Live domain checks below are intentionally left open until `https://homebatterys
 - [ ] /guides inspected
 - [ ] /methodology inspected
 - [ ] /home-battery-quote-comparison-uk inspected
+- [ ] /home-battery-installer-quotes-uk inspected
 - [ ] /home-battery-savings-examples-uk inspected
 
 ## Bing Webmaster Tools
@@ -45,6 +49,7 @@ Live domain checks below are intentionally left open until `https://homebatterys
 - [ ] /tools checked
 - [ ] /guides checked
 - [ ] /home-battery-quote-comparison-uk checked
+- [ ] /home-battery-installer-quotes-uk checked
 
 ## First-week follow-up
 

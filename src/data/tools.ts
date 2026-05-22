@@ -15,4 +15,11 @@ export const tools = [
     href: routePaths.batteryQuoteComparison,
     label: "Worksheet",
   },
+  {
+    title: "Installer quote preparation",
+    description:
+      "Prepare the numbers installers need, compare offers on a like-for-like basis and send a quote-ready enquiry.",
+    href: routePaths.batteryInstallerQuotes,
+    label: "Quote funnel",
+  },
 ];

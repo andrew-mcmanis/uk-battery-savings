@@ -32,10 +32,10 @@ export default function HeroSection() {
             </a>
 
             <Link
-              href={routePaths.tools}
+              href={routePaths.batteryInstallerQuotes}
               className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 ring-1 ring-white/20 hover:bg-slate-100"
             >
-              Compare tools
+              Compare quotes
             </Link>
 
             <a

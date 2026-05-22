@@ -28,6 +28,7 @@ Key pages to check:
 - [ ] /guides
 - [ ] /methodology
 - [ ] /home-battery-quote-comparison-uk
+- [ ] /home-battery-installer-quotes-uk
 - [ ] /home-battery-savings-examples-uk
 - [ ] /home-battery-quote-checklist-uk
 - [ ] /is-a-home-battery-worth-it-uk
@@ -79,6 +80,8 @@ Questions to answer:
 - Which pages are people actually visiting?
 - Are visitors reaching /tools?
 - Are visitors reaching /home-battery-quote-comparison-uk?
+- Are visitors reaching /home-battery-installer-quotes-uk?
+- Are visitors clicking mailto quote enquiry links?
 - Are visitors mostly mobile or desktop?
 - Are visitors coming from search, direct, or referrals?
 
@@ -92,6 +95,7 @@ Check:
 - [ ] /tools performance
 - [ ] /guides performance
 - [ ] /home-battery-quote-comparison-uk performance
+- [ ] /home-battery-installer-quotes-uk performance
 - [ ] Any poor Core Web Vitals
 - [ ] Any slow pages
 
@@ -112,6 +116,7 @@ Open these pages live:
 - [ ] https://homebatterysavings.co.uk/tools
 - [ ] https://homebatterysavings.co.uk/guides
 - [ ] https://homebatterysavings.co.uk/home-battery-quote-comparison-uk
+- [ ] https://homebatterysavings.co.uk/home-battery-installer-quotes-uk
 - [ ] https://homebatterysavings.co.uk/sitemap.xml
 - [ ] https://homebatterysavings.co.uk/robots.txt
 
@@ -143,7 +148,7 @@ Write the decision here:
 
 ```text
 Week: 2026-05-22
-Observation: Local manual review found three improvement opportunities before meaningful traffic review data is available: homepage snippet clarity, stronger homepage path to tools, and clearer quote comparison explanation.
-Decision: Improve existing pages and internal links now; defer analytics-led decisions until Search Console, Bing and Vercel data are available.
-Action: Updated homepage metadata, added a homepage tools CTA, improved the quote comparison explanation, removed the external Google font dependency, improved currency input affordance, added compact mobile header links, added vendor-neutral popular battery size shortcuts, and completed the local SEO/internal-link audit.
+Observation: Local manual review found three improvement opportunities before meaningful traffic review data is available: homepage snippet clarity, stronger homepage path to tools, and clearer quote comparison explanation. A monetisation review also found the site needed a buyer-intent quote funnel before paid partnerships or referral links would make sense.
+Decision: Improve existing pages and internal links now, add one commercial-intent quote page, and defer analytics-led content expansion until Search Console, Bing and Vercel data are available.
+Action: Updated homepage metadata, added a homepage tools CTA, improved the quote comparison explanation, removed the external Google font dependency, improved currency input affordance, added compact mobile header links, added vendor-neutral popular battery size shortcuts, added a quote-ready installer comparison page, added commercial disclosure, and completed the local SEO/internal-link audit.
 ```

@@ -21,6 +21,8 @@ Use this file to record improvements based on real data, not guesses.
 | /                                 | Homepage snippet could be clearer            | Manual review    | Medium   | Improve title/description          | Done        |
 | /tools                            | Tools page needed stronger homepage path     | Manual review    | Low      | Add stronger homepage link         | Done        |
 | /home-battery-quote-comparison-uk | Above-the-fold explanation needed more detail | Manual review    | Medium   | Improve above-the-fold explanation | Done        |
+| /home-battery-installer-quotes-uk | Commercial quote intent needed a landing page | Monetisation review | High | Add lead-ready quote comparison page | Done |
+| /commercial-disclosure            | Future referral and sponsor trust needed disclosure | Monetisation review | Medium | Add commercial disclosure page | Done |
 
 Completed 2026-05-22:
 
@@ -30,6 +32,9 @@ Completed 2026-05-22:
 - Moved pound signs before currency inputs in the calculator and quote worksheet.
 - Added compact mobile header links for Calculator, Tools and Guides.
 - Added vendor-neutral popular battery size shortcuts to the calculator.
+- Added a quote-ready installer comparison landing page for higher-intent visitors.
+- Added homepage, header, calculator, tools and guide CTAs toward quote comparison.
+- Added a commercial disclosure page before introducing referral, affiliate or sponsored placements.
 
 ---
 
