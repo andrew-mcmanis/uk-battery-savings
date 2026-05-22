@@ -142,7 +142,8 @@ Record the weekly decision:
 Write the decision here:
 
 ```text
-Week:
-Observation:
-Decision:
-Action:
+Week: 2026-05-22
+Observation: Local manual review found three improvement opportunities before meaningful traffic review data is available: homepage snippet clarity, stronger homepage path to tools, and clearer quote comparison explanation.
+Decision: Improve existing pages and internal links now; defer analytics-led decisions until Search Console, Bing and Vercel data are available.
+Action: Updated homepage metadata, added a homepage tools CTA, improved the quote comparison explanation, removed the external Google font dependency, improved currency input affordance, added compact mobile header links, added vendor-neutral popular battery size shortcuts, and completed the local SEO/internal-link audit.
+```

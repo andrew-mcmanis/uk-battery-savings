@@ -69,6 +69,44 @@ export default function HomeBatteryQuoteComparisonPage() {
           </p>
         </section>
 
+        <section className="rounded-2xl bg-emerald-50 p-5 ring-1 ring-emerald-100">
+          <h2 className="text-2xl font-bold text-slate-950">
+            Compare the quote, not just the battery price
+          </h2>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <div>
+              <h3 className="font-semibold text-slate-950">
+                1. Enter total installed cost
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Use the full fitted price including VAT, hardware and installer
+                labour, not just the battery unit price.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-950">
+                2. Compare usable capacity
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Cost per usable kWh helps reveal whether a cheaper quote is
+                actually smaller or more limited.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-950">
+                3. Check warranty and backup
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                A stronger warranty, cycle limit or backup option can matter as
+                much as the headline payback estimate.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <QuoteComparisonWorksheet />
 
         <section>

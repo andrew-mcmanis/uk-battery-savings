@@ -1,6 +1,7 @@
 "use client";
 
 import { batteryPresets } from "@/data/batteryPresets";
+import { popularBatteryOptions } from "@/data/popularBatteryOptions";
 import { routePaths, sectionPaths } from "@/data/siteRoutes";
 import {
   calculateBatterySavings,
@@ -26,6 +27,7 @@ type NumberInputProps = {
   min?: number;
   max?: number;
   step?: number;
+  prefix?: string;
   suffix?: string;
   helpText?: string;
   onChange: (value: number) => void;
@@ -37,6 +39,7 @@ function NumberInput({
   min,
   max,
   step = 1,
+  prefix,
   suffix,
   helpText,
   onChange,
@@ -46,6 +49,12 @@ function NumberInput({
       <span className="text-sm font-medium text-slate-800">{label}</span>
 
       <div className="mt-2 flex rounded-xl border border-slate-300 bg-white shadow-sm focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-100">
+        {prefix ? (
+          <span className="flex shrink-0 items-center px-4 text-sm text-slate-500">
+            {prefix}
+          </span>
+        ) : null}
+
         <input
           type="number"
           value={value}
@@ -57,7 +66,7 @@ function NumberInput({
         />
 
         {suffix ? (
-          <span className="flex items-center px-4 text-sm text-slate-500">
+          <span className="flex shrink-0 items-center px-4 text-sm text-slate-500">
             {suffix}
           </span>
         ) : null}
@@ -156,6 +165,8 @@ export default function BatterySavingsCalculator() {
     useState<BatteryCalculatorInputs>(defaultBatteryInputs);
 
   const [selectedPresetId, setSelectedPresetId] = useState<string>("typical");
+  const [selectedBatteryOptionId, setSelectedBatteryOptionId] =
+    useState<string>("custom");
 
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
     "idle"
@@ -178,6 +189,7 @@ export default function BatterySavingsCalculator() {
     const timeoutId = window.setTimeout(() => {
       setInputs(parsedInputs);
       setSelectedPresetId("custom");
+      setSelectedBatteryOptionId("custom");
     }, 0);
 
     return () => {
@@ -204,6 +216,23 @@ export default function BatterySavingsCalculator() {
   function applyPreset(presetId: string, presetInputs: BatteryCalculatorInputs) {
     setInputs(sanitizeBatteryInputs(presetInputs));
     setSelectedPresetId(presetId);
+    setSelectedBatteryOptionId("custom");
+  }
+
+  function applyBatteryOption(optionId: string, usableCapacityKwh: number) {
+    setInputs((currentInputs) =>
+      sanitizeBatteryInputs({
+        ...currentInputs,
+        batteryCapacityKwh: usableCapacityKwh,
+        peakUsageCoveredKwh: Math.min(
+          currentInputs.peakUsageCoveredKwh,
+          usableCapacityKwh
+        ),
+      })
+    );
+
+    setSelectedPresetId("custom");
+    setSelectedBatteryOptionId(optionId);
   }
 
   function updateInput<Key extends keyof BatteryCalculatorInputs>(
@@ -218,6 +247,10 @@ export default function BatterySavingsCalculator() {
     );
 
     setSelectedPresetId("custom");
+
+    if (key === "batteryCapacityKwh") {
+      setSelectedBatteryOptionId("custom");
+    }
   }
 
   async function copyResultSummary() {
@@ -695,6 +728,61 @@ export default function BatterySavingsCalculator() {
             </div>
           </div>
 
+          <div className="mt-6 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h4 className="font-semibold text-slate-950">
+                  Popular battery sizes
+                </h4>
+                <p className="mt-1 text-sm leading-6 text-slate-600">
+                  Choose a common usable capacity as a starting point, then add
+                  the installed cost from your own quote.
+                </p>
+              </div>
+
+              {selectedBatteryOptionId !== "custom" ? (
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
+                  Battery size applied
+                </span>
+              ) : null}
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {popularBatteryOptions.map((option) => {
+                const isSelected = selectedBatteryOptionId === option.id;
+
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() =>
+                      applyBatteryOption(option.id, option.usableCapacityKwh)
+                    }
+                    className={`rounded-xl border p-4 text-left transition ${
+                      isSelected
+                        ? "border-slate-900 bg-white shadow-sm"
+                        : "border-slate-200 bg-white/70 hover:border-emerald-300 hover:bg-white"
+                    }`}
+                  >
+                    <span className="block text-sm font-semibold text-slate-950">
+                      {option.label}
+                    </span>
+
+                    <span className="mt-1 block text-sm leading-6 text-slate-600">
+                      {option.description}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="mt-4 text-xs leading-5 text-slate-500">
+              These are generic size shortcuts, not product recommendations.
+              Always check the usable capacity and warranty on the actual quote.
+            </p>
+          </div>
+
           <div className="mt-6 grid gap-5">
             <NumberInput
               label="Usable battery capacity"
@@ -721,7 +809,7 @@ export default function BatterySavingsCalculator() {
               value={inputs.installedCost}
               min={0}
               step={100}
-              suffix="£"
+              prefix="£"
               helpText="Use the total installed cost, not just the battery unit price."
               onChange={(value) => updateInput("installedCost", value)}
             />

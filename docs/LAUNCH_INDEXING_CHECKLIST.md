@@ -1,5 +1,18 @@
 # Launch and Indexing Checklist
 
+Local pre-launch verification completed 2026-05-22:
+
+- [x] Local robots.txt loads
+- [x] Local sitemap.xml loads
+- [x] Local robots.txt references sitemap.xml
+- [x] Local sitemap.xml includes homepage
+- [x] Local sitemap.xml includes /tools
+- [x] Local sitemap.xml includes /guides
+- [x] Local sitemap.xml includes /methodology
+- [x] Local sitemap.xml includes /home-battery-quote-comparison-uk
+
+Live domain checks below are intentionally left open until `https://homebatterysavings.co.uk` is reachable and dashboard access is available.
+
 ## Live crawl files
 
 - [ ] https://homebatterysavings.co.uk/robots.txt loads

@@ -29,6 +29,8 @@ const navLinks = [
   },
 ];
 
+const mobileNavLinks = navLinks.slice(0, 3);
+
 export default function SiteHeader() {
   return (
     <>
@@ -68,6 +70,23 @@ export default function SiteHeader() {
             Start
           </Link>
         </div>
+
+        <nav
+          aria-label="Mobile navigation"
+          className="border-t border-white/10 px-4 pb-3 md:hidden"
+        >
+          <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto text-xs font-semibold text-slate-300">
+            {mobileNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="shrink-0 rounded-full bg-white/5 px-3 py-1.5 ring-1 ring-white/10 hover:bg-white/10 hover:text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
       </header>
     </>
   );

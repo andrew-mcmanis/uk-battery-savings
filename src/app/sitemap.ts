@@ -11,11 +11,8 @@ function buildUrl(path: string) {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const currentDate = new Date();
-
   return publicRoutes.map((route) => ({
     url: buildUrl(route.path),
-    lastModified: currentDate,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   calculateQuoteComparison,
   getQuoteComparisonSummary,
+  sanitizeQuoteComparisonInput,
 } from "@/lib/quoteComparison";
 
 describe("calculateQuoteComparison", () => {
@@ -49,6 +50,47 @@ describe("calculateQuoteComparison", () => {
     });
 
     expect(result.paybackYears).toBeNull();
+  });
+
+  it("sanitizes unsafe numeric values before calculating", () => {
+    const result = calculateQuoteComparison({
+      id: "quote-1",
+      quoteName: "Example quote",
+      installedCost: Number.POSITIVE_INFINITY,
+      usableCapacityKwh: 10,
+      warrantyYears: 10,
+      estimatedAnnualSaving: Number.NaN,
+      backupPowerIncluded: false,
+      notes: "",
+    });
+
+    expect(result.installedCost).toBe(0);
+    expect(result.estimatedAnnualSaving).toBe(0);
+    expect(result.paybackYears).toBeNull();
+  });
+});
+
+describe("sanitizeQuoteComparisonInput", () => {
+  it("clamps numbers and text to worksheet limits", () => {
+    const result = sanitizeQuoteComparisonInput({
+      id: "quote-1",
+      quoteName: "A".repeat(100),
+      installedCost: -1000,
+      usableCapacityKwh: 999,
+      warrantyYears: 100,
+      estimatedAnnualSaving: -50,
+      backupPowerIncluded: true,
+      notes: "B".repeat(2100),
+    });
+
+    expect(result).toMatchObject({
+      quoteName: "A".repeat(80),
+      installedCost: 0,
+      usableCapacityKwh: 100,
+      warrantyYears: 30,
+      estimatedAnnualSaving: 0,
+      notes: "B".repeat(2000),
+    });
   });
 });
 

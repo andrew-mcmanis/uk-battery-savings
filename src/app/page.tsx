@@ -18,9 +18,9 @@ import {
 } from "@/lib/structuredData";
 
 export const metadata: Metadata = {
-  title: "UK Home Battery Savings Calculator",
+  title: "UK Home Battery Savings Calculator and Payback Estimator",
   description:
-    "Estimate whether a home battery and cheap off-peak electricity could reduce your UK electricity bill. Calculate annual savings, monthly savings and payback period.",
+    "Estimate UK home battery savings, monthly savings, payback period and break-even cost using your battery size, tariff rates and expected usage.",
   keywords: [
     "home battery savings calculator UK",
     "battery payback calculator UK",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "UK Home Battery Savings Calculator",
+    title: "UK Home Battery Savings Calculator and Payback Estimator",
     description:
       "Estimate home battery savings, payback period and break-even cost using UK electricity tariff assumptions.",
     type: "website",

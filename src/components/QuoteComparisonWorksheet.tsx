@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   calculateQuoteComparison,
   getQuoteComparisonSummary,
+  sanitizeQuoteComparisonInput,
   type QuoteComparisonInput,
 } from "@/lib/quoteComparison";
 import {
@@ -53,6 +54,7 @@ type NumberFieldProps = {
   value: number;
   min?: number;
   step?: number;
+  prefix?: string;
   suffix?: string;
   helpText?: string;
   onChange: (value: number) => void;
@@ -63,6 +65,7 @@ function NumberField({
   value,
   min = 0,
   step = 1,
+  prefix,
   suffix,
   helpText,
   onChange,
@@ -72,6 +75,12 @@ function NumberField({
       <span className="text-sm font-medium text-slate-800">{label}</span>
 
       <div className="mt-2 flex rounded-xl border border-slate-300 bg-white shadow-sm focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-100">
+        {prefix ? (
+          <span className="flex shrink-0 items-center px-4 text-sm text-slate-500">
+            {prefix}
+          </span>
+        ) : null}
+
         <input
           type="number"
           value={value}
@@ -82,7 +91,7 @@ function NumberField({
         />
 
         {suffix ? (
-          <span className="flex items-center px-4 text-sm text-slate-500">
+          <span className="flex shrink-0 items-center px-4 text-sm text-slate-500">
             {suffix}
           </span>
         ) : null}
@@ -149,10 +158,10 @@ export default function QuoteComparisonWorksheet() {
     setQuotes((currentQuotes) =>
       currentQuotes.map((quote) =>
         quote.id === quoteId
-          ? {
+          ? sanitizeQuoteComparisonInput({
               ...quote,
               [key]: value,
-            }
+            })
           : quote
       )
     );
@@ -492,7 +501,7 @@ export default function QuoteComparisonWorksheet() {
                 value={selectedQuote.installedCost}
                 min={0}
                 step={100}
-                suffix="£"
+                prefix="£"
                 onChange={(value) =>
                   updateQuote(selectedQuote.id, "installedCost", value)
                 }
@@ -527,7 +536,7 @@ export default function QuoteComparisonWorksheet() {
                 value={selectedQuote.estimatedAnnualSaving}
                 min={0}
                 step={10}
-                suffix="£"
+                prefix="£"
                 helpText="Use the annual saving from the calculator or the installer estimate."
                 onChange={(value) =>
                   updateQuote(selectedQuote.id, "estimatedAnnualSaving", value)

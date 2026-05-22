@@ -29,21 +29,46 @@ export type QuoteComparisonSummary = {
   warnings: QuoteComparisonWarning[];
 };
 
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+
+  return Math.min(Math.max(value, min), max);
+}
+
+export function sanitizeQuoteComparisonInput(
+  quote: QuoteComparisonInput
+): QuoteComparisonInput {
+  return {
+    id: quote.id,
+    quoteName: quote.quoteName.slice(0, 80),
+    installedCost: clampNumber(quote.installedCost, 0, 100000),
+    usableCapacityKwh: clampNumber(quote.usableCapacityKwh, 0, 100),
+    warrantyYears: clampNumber(quote.warrantyYears, 1, 30),
+    estimatedAnnualSaving: clampNumber(quote.estimatedAnnualSaving, 0, 100000),
+    backupPowerIncluded: quote.backupPowerIncluded,
+    notes: quote.notes.slice(0, 2000),
+  };
+}
+
 export function calculateQuoteComparison(
   quote: QuoteComparisonInput
 ): QuoteComparisonResult {
+  const sanitizedQuote = sanitizeQuoteComparisonInput(quote);
+
   const costPerUsableKwh =
-    quote.usableCapacityKwh > 0
-      ? quote.installedCost / quote.usableCapacityKwh
+    sanitizedQuote.usableCapacityKwh > 0
+      ? sanitizedQuote.installedCost / sanitizedQuote.usableCapacityKwh
       : null;
 
   const paybackYears =
-    quote.estimatedAnnualSaving > 0
-      ? quote.installedCost / quote.estimatedAnnualSaving
+    sanitizedQuote.estimatedAnnualSaving > 0
+      ? sanitizedQuote.installedCost / sanitizedQuote.estimatedAnnualSaving
       : null;
 
   return {
-    ...quote,
+    ...sanitizedQuote,
     costPerUsableKwh,
     paybackYears,
   };

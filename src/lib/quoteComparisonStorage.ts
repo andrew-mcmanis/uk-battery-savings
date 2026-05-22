@@ -1,4 +1,7 @@
-import type { QuoteComparisonInput } from "@/lib/quoteComparison";
+import {
+  sanitizeQuoteComparisonInput,
+  type QuoteComparisonInput,
+} from "@/lib/quoteComparison";
 
 export type SavedQuoteComparisonState = {
   quotes: QuoteComparisonInput[];
@@ -10,16 +13,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function clampNumber(value: number, min: number, max: number) {
-  if (!Number.isFinite(value)) {
-    return min;
-  }
-
-  return Math.min(Math.max(value, min), max);
-}
-
-function parseNumber(value: unknown, min: number, max: number) {
-  return clampNumber(typeof value === "number" ? value : Number(value), min, max);
+function parseNumber(value: unknown) {
+  return typeof value === "number" ? value : Number(value);
 }
 
 function parseQuote(value: unknown): QuoteComparisonInput | null {
@@ -31,22 +26,22 @@ function parseQuote(value: unknown): QuoteComparisonInput | null {
     return null;
   }
 
-  return {
+  return sanitizeQuoteComparisonInput({
     id: value.id,
     quoteName:
       typeof value.quoteName === "string"
-        ? value.quoteName.slice(0, 80)
+        ? value.quoteName
         : "Unnamed quote",
-    installedCost: parseNumber(value.installedCost, 0, 100000),
-    usableCapacityKwh: parseNumber(value.usableCapacityKwh, 0, 100),
-    warrantyYears: parseNumber(value.warrantyYears, 1, 30),
-    estimatedAnnualSaving: parseNumber(value.estimatedAnnualSaving, 0, 100000),
+    installedCost: parseNumber(value.installedCost),
+    usableCapacityKwh: parseNumber(value.usableCapacityKwh),
+    warrantyYears: parseNumber(value.warrantyYears),
+    estimatedAnnualSaving: parseNumber(value.estimatedAnnualSaving),
     backupPowerIncluded:
       typeof value.backupPowerIncluded === "boolean"
         ? value.backupPowerIncluded
         : false,
-    notes: typeof value.notes === "string" ? value.notes.slice(0, 2000) : "",
-  };
+    notes: typeof value.notes === "string" ? value.notes : "",
+  });
 }
 
 export function serializeQuoteComparisonState(

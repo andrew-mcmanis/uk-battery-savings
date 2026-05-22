@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { routePaths } from "@/data/siteRoutes";
+
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-slate-950 text-white">
@@ -27,6 +30,13 @@ export default function HeroSection() {
             >
               Start calculator
             </a>
+
+            <Link
+              href={routePaths.tools}
+              className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-950 ring-1 ring-white/20 hover:bg-slate-100"
+            >
+              Compare tools
+            </Link>
 
             <a
               href="#how-it-works"

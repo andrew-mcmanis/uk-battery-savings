@@ -18,9 +18,18 @@ Use this file to record improvements based on real data, not guesses.
 
 | Page                              | Issue found                                  | Source           | Priority | Action                             | Status      |
 | --------------------------------- | -------------------------------------------- | ---------------- | -------- | ---------------------------------- | ----------- |
-| /                                 | Example: Low CTR                             | Search Console   | Medium   | Improve title/description          | Not started |
-| /tools                            | Example: Low visits                          | Vercel Analytics | Low      | Add stronger homepage link         | Not started |
-| /home-battery-quote-comparison-uk | Example: High visits, low engagement unknown | Manual review    | Medium   | Improve above-the-fold explanation | Not started |
+| /                                 | Homepage snippet could be clearer            | Manual review    | Medium   | Improve title/description          | Done        |
+| /tools                            | Tools page needed stronger homepage path     | Manual review    | Low      | Add stronger homepage link         | Done        |
+| /home-battery-quote-comparison-uk | Above-the-fold explanation needed more detail | Manual review    | Medium   | Improve above-the-fold explanation | Done        |
+
+Completed 2026-05-22:
+
+- Updated homepage metadata title and description.
+- Added a stronger homepage CTA to the tools page.
+- Added a quote comparison explanation panel covering installed cost, usable capacity, warranty and backup checks.
+- Moved pound signs before currency inputs in the calculator and quote worksheet.
+- Added compact mobile header links for Calculator, Tools and Guides.
+- Added vendor-neutral popular battery size shortcuts to the calculator.
 
 ---
 
